@@ -16,7 +16,7 @@ Lambda@Edge functions can be invoked during four event phases:
 
 A CloudFront distribution can attach one Lambda function per event type.
 
-[Sample Lambda@Edge Function](https://github.com/skyfire-xyz/skyfire-solutions-smart-news-aws-crawler-demo/blob/SKYK-930-aws-integration/platforms/aws/cloudfront-waf/lambda%40edge/index.mjs) for Skyfire Token Verification
+[Sample Lambda@Edge Function](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/blob/SKYK-930-aws-integration/platforms/aws/cloudfront-waf/lambda%40edge/index.mjs) for Skyfire Token Verification
 
 Note: This sample uses a Viewer Request event, so the token validation happens before cache evaluation.
 

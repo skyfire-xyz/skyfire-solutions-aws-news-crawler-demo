@@ -16,7 +16,7 @@ Lambda@Edge functions can be invoked during four event phases:
 
 A CloudFront distribution can attach one Lambda function per event type.
 
-If your environment requires advanced security (bot mitigation, IP filtering, rate limiting, geo-restrictions), you can layer AWS WAF on top of your CloudFront + Lambda@Edge architecture - refer [here](https://github.com/skyfire-xyz/skyfire-solutions-smart-news-aws-crawler-demo/tree/SKYK-930-aws-integration/platforms/aws/cloudfront-waf).
+If your environment requires advanced security (bot mitigation, IP filtering, rate limiting, geo-restrictions), you can layer AWS WAF on top of your CloudFront + Lambda@Edge architecture - refer [here](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/SKYK-930-aws-integration/platforms/aws/cloudfront-waf).
 
 #### Deployment Steps
 1. Create a CloudFront Distribution
@@ -26,7 +26,7 @@ Configure your origin, cache policy, and any required behaviors based on your ap
 Lambda@Edge functions must be created in the us-east-1 region. 
 CloudFront's control plane is hosted exclusively in this region, and all edge function replication begins from here. More details here.
 
-3. [Sample Lambda@Edge Function](https://github.com/skyfire-xyz/skyfire-solutions-smart-news-aws-crawler-demo/blob/SKYK-930-aws-integration/platforms/aws/cloudfront/lambda%40edge/index.mjs) for Skyfire Token Verification
+3. [Sample Lambda@Edge Function](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/blob/SKYK-930-aws-integration/platforms/aws/cloudfront/lambda%40edge/index.mjs) for Skyfire Token Verification
 
 Note: This sample uses a Viewer Request event so token validation happens before cache evaluation.
 

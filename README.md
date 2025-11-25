@@ -53,7 +53,7 @@ The demo consists of four integrated projects that work together to demonstrate 
 
 1. Crawler Agent Frontend:
 
-- Available at: [https://github.com/skyfire-xyz/skyfire-solutions-smart-news-aws-crawler-demo/crawler-agent-fe](https://github.com/skyfire-xyz/skyfire-solutions-smart-news-aws-crawler-demo/tree/main/crawler-agent-fe)
+- Available at: [https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/crawler-agent-fe](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/crawler-agent-fe)
 - Purpose: Interactive frontend that demonstrates the difference between authorized and unauthorized crawling
 - Features:
   - Skyfire token management interface
@@ -62,7 +62,7 @@ The demo consists of four integrated projects that work together to demonstrate 
 
 2. Crawler Agent Core:
 
-- Available at: [https://github.com/skyfire-xyz/skyfire-solutions-smart-news-aws-crawler-demo/crawler-agent-core](https://github.com/skyfire-xyz/skyfire-solutions-smart-news-aws-crawler-demo/tree/main/crawler-agent-core)
+- Available at: [https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/crawler-agent-core](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/crawler-agent-core)
 - Purpose: Backend service that performs the actual crawling operations
 - Features:
   - Executes crawl requests with and without `kya` tokens
@@ -74,13 +74,12 @@ The demo consists of four integrated projects that work together to demonstrate 
 
 3. AWS CloudFront/API Gateway with & without WAF for Protection:
 
-- Available at: [https://github.com/skyfire-xyz/skyfire-solutions-smart-news-aws-crawler-demo/aws](https://github.com/skyfire-xyz/skyfire-solutions-smart-news-aws-crawler-demo/tree/main/aws)
+- Available at: [https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/aws](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/aws)
 - Purpose: Acts as the bot manager and `kya` token processor
 - Features:
   - `kya` Token Verification - Validates the tokens in the `skyfire-pay-id` header of the requests
   - Access Logging - Logs all authenticated bot requests for audit and monitoring
   - Request Proxying - Forwards valid requests to the target website
-- Technology: Node.js/Express (docker)
 
 4. Protected Website:
 
@@ -91,10 +90,10 @@ The demo consists of four integrated projects that work together to demonstrate 
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/skyfire-xyz/skyfire-solutions-smart-news-aws-crawler-demo.git
+    git clone https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo.git
     ```
 2.  Follow installation instructions in each sub-directory
 
 ### Note:
 
-Take a look at the live demo [https://news-crawler-demo.skyfire.xyz/](https://news-crawler-demo.skyfire.xyz/).
+Take a look at the live demo [https://crawler-news-demo-aws.onrender.com/](https://crawler-news-demo-aws.onrender.com/).
