@@ -16,31 +16,31 @@ Lambda@Edge functions can be invoked during four event phases:
 
 A CloudFront distribution can attach one Lambda function per event type.
 
-If your environment requires advanced security (bot mitigation, IP filtering, rate limiting, geo-restrictions), you can layer AWS WAF on top of your CloudFront + Lambda@Edge architecture - refer [here](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/SKYK-930-aws-integration/platforms/aws/cloudfront-waf).
+If your environment requires advanced security (bot mitigation, IP filtering, rate limiting, geo-restrictions), you can layer AWS WAF on top of your CloudFront + Lambda@Edge architecture - refer [here](../cloudfront-waf).
 
 #### Deployment Steps
 1. Create a CloudFront Distribution
 Configure your origin, cache policy, and any required behaviors based on your application architecture.
-[!cloudfront distribution creation step 1](static/images/cloudfront/create-distribution-1)
-[!cloudfront distribution creation step 2](static/images/cloudfront/create-distribution-2)
-[!cloudfront distribution creation step 3](static/images/cloudfront/create-distribution-3)
-[!cloudfront distribution creation step 4](static/images/cloudfront/create-distribution-4)
+[!cloudfront distribution creation step 1](../static/images/cloudfront/create-distribution-1)
+[!cloudfront distribution creation step 2](../static/images/cloudfront/create-distribution-2)
+[!cloudfront distribution creation step 3](../static/images/cloudfront/create-distribution-3)
+[!cloudfront distribution creation step 4](../static/images/cloudfront/create-distribution-4)
 
 2. Create a Lambda@Edge Function
 Lambda@Edge functions must be created in the us-east-1 region. 
 CloudFront's control plane is hosted exclusively in this region, and all edge function replication begins from here. More details here.
 
-[!lambda function creation](static/images/cloudfront/create-lambda)
+[!lambda function creation](../static/images/cloudfront/create-lambda)
 
 3. [Sample Lambda@Edge Function](cloudfront/lambda%40edge) for Skyfire Token Verification
 
 4. Add a trigger and deploy to Lambda@edge
-[!lambda trigger](static/images/cloudfront/lambda-trigger)
+[!lambda trigger](../static/images/cloudfront/lambda-trigger)
 Note: This sample uses a Viewer Request event so token validation happens before cache evaluation.
 
 #### Flow Summary (High-Level)
 
-[!sequence diagram](static/images/cloudfront/cloudfront-seq-diag)
+[!sequence diagram](../static/images/cloudfront/cloudfront-seq-diag)
 
 - Viewer sends request.
 - CloudFront receives request → triggers Viewer Request Lambda@Edge.
