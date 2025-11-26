@@ -155,6 +155,7 @@ In this sample, we have directly allowed **`CategorySeo`** & **`CategorySearchEn
     ```
 
 In the last `SkyfireDecisioning` rule, we block the request, if a particular bot request has an associated `SkyfireTokenRequired` label but doesn't have a `skyfire-pay-id` JWT in the request header. 
+
 ![cloudfront-waf-skyfire-decisioning-1](../static/images/cloudfront-waf/cloudfront-waf-skyfire-decisioning-1.png)
 
 A custom response can be set when WAF blocks requests to origin server
