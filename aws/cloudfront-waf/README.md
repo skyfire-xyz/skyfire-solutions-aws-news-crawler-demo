@@ -101,12 +101,12 @@ Let's establish WAF rules in order to accomplish the above discussed requirement
 
 **`AWSManagedRulesBotControlRuleSet`** categorises bot requests into various categories and adds corresponding category labels (which can be used to target particular category of bots in the following rules). 
 
-[!Labels for bot categories](../static/images/cloudfront-waf/cloudfront-waf-bot-category-labels.png)
+![Labels for bot categories](../static/images/cloudfront-waf/cloudfront-waf-bot-category-labels.png)
 
 We have the capability to choose one of allow, block, count, challenge for each of these category bots.
 
 In this sample, we have directly allowed **`CategorySeo`** & **`CategorySearchEngine`** from this rule
-[!WAF Rules for allowing SearchEngine and SEO bot categories](../static/images/cloudfront-waf/cloudfront-waf-allowed-bots.png)
+![WAF Rules for allowing SearchEngine and SEO bot categories](../static/images/cloudfront-waf/cloudfront-waf-allowed-bots.png)
 
 2. Bots with Skyfire Token - 
 
@@ -155,10 +155,10 @@ In this sample, we have directly allowed **`CategorySeo`** & **`CategorySearchEn
     ```
 
 In the last `SkyfireDecisioning` rule, we block the request, if a particular bot request has an associated `SkyfireTokenRequired` label but doesn't have a `skyfire-pay-id` JWT in the request header. 
-[!cloudfront-waf-skyfire-decisioning-1](../static/images/cloudfront-waf/cloudfront-waf-skyfire-decisioning-1.png)
+![cloudfront-waf-skyfire-decisioning-1](../static/images/cloudfront-waf/cloudfront-waf-skyfire-decisioning-1.png)
 
 A custom response can be set when WAF blocks requests to origin server
-[!cloudfront-waf-skyfire-decisioning-2](../static/images/cloudfront-waf/cloudfront-waf-skyfire-decisioning-2.png)
+![cloudfront-waf-skyfire-decisioning-2](../static/images/cloudfront-waf/cloudfront-waf-skyfire-decisioning-2.png)
 
 ```
 JSON view
