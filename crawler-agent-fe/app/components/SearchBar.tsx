@@ -59,7 +59,7 @@ const suggestions: Suggestion[] = [
     name: "MockNews",
     type: "Protected",
   },
-  { url: "https://ac8t87if5a.execute-api.us-east-1.amazonaws.com/dev/article", name: "MockNews (API Gateway)", type: "Protected" }, //https://mock-news-site-aws-api-gateway.skyfire.xyz/dev/article/
+  { url: "https://mock-news-site-aws-api-gateway.skyfire.xyz/", name: "MockNews (API Gateway)", type: "Protected" }, //https://ac8t87if5a.execute-api.us-east-1.amazonaws.com/dev/article
   {
     url: "https://vmqjil4y49.execute-api.us-east-1.amazonaws.com/dev/article", //https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/dev/article/
     name: "MockNews (API Gateway + WAF)",
@@ -75,17 +75,17 @@ const suggestions: Suggestion[] = [
 
 const botTypes: BotTypes[] = [
   {
-    type: "Good bot",
+    type: "Allowed bot",
     description:
       "Open access to protected content for Search Engine Bot (google/bing etc)",
     userAgent: "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
   },
   {
-    type: "AI bot",
+    type: "Acceptable Skyfire Token bot",
     description: "Requires Skyfire KYA Token to access protected content",
     userAgent: "GPTBot/1.0 (+https://www.gptbot.ai/)",
   },
-  { type: "Bad bot", description: "Access not authorized at all",
+  { type: "Prohibited bot", description: "Access not authorized at all",
     userAgent: "Mozilla/5.0 (compatible; archive.org_bot +archive.org)" //InternetArchiveBot/2.0 (www.archive.org)
    },
 ]
@@ -119,7 +119,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   // watch selected url to decide whether to show bot dropdown
   const selectedUrl = form.watch("url")
   const showBotDropdown = [
-    "https://vmqjil4y49.execute-api.us-east-1.amazonaws.com/dev/article", //"https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/dev/article/",
+    "https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/", //"https://vmqjil4y49.execute-api.us-east-1.amazonaws.com/dev/article", 
     "https://dex4cbi52l5ce.cloudfront.net/", //"https://mock-news-site-aws-cloudfront-waf.skyfire.xyz/"
   ].includes(selectedUrl)
 
