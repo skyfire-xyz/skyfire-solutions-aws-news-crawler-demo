@@ -35,6 +35,7 @@ CloudFront's control plane is hosted exclusively in this region, and all edge fu
 3. [Sample Lambda@Edge Function](cloudfront/lambda%40edge) for Skyfire Token Verification
 
 4. Add a trigger and deploy to Lambda@edge
+
 ![lambda trigger](../static/images/cloudfront/lambda-trigger.png)
 Note: This sample uses a Viewer Request event so token validation happens before cache evaluation.
 
