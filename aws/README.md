@@ -109,7 +109,6 @@ In AWS API Gateway there are authorizers which act as security features used to 
 - Does NOT support EC algorithms (RSA only)
 - Therefore, not suitable for Skyfire, since Skyfire uses ES256-based JWTs.
 
-
 2. ✔ Lambda Authorizer
 - Works for both REST and HTTP APIs
 - You define full authentication logic inside your Lambda function
@@ -117,6 +116,10 @@ In AWS API Gateway there are authorizers which act as security features used to 
 - Supports setting identity sources (header, query param, etc.)
 
 Note: API Gateway supports one authorizer per route. If you need multiple layers of validation, you must implement them inside your Lambda Authorizer.
+
+#### Flow Summary (High-Level)
+
+![Sequence Diagram](static/images/api-gateway/api-gateway-seq-diag.png)
 
 #### 2.3 API Gateway + WAF
 

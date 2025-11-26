@@ -81,7 +81,7 @@ const botTypes: BotTypes[] = [
     userAgent: "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
   },
   {
-    type: "Acceptable Skyfire Token bot",
+    type: "Acceptable Skyfire bot",
     description: "Requires Skyfire KYA Token to access protected content",
     userAgent: "GPTBot/1.0 (+https://www.gptbot.ai/)",
   },
