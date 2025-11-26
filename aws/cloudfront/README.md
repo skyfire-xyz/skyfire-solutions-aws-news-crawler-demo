@@ -39,8 +39,11 @@ CloudFront's control plane is hosted exclusively in this region, and all edge fu
 
 4. Add a trigger and deploy to Lambda@edge
 
-![lambda trigger](../static/images/cloudfront/lambda-trigger.png)
+![viewer request lambda](../static/images/cloudfront/viewer-request-lambda.png)
+
 Note: This sample uses a Viewer Request event so token validation happens before cache evaluation.
+
+![lambda trigger](../static/images/cloudfront/lambda-trigger.png)
 
 #### Flow Summary (High-Level)
 

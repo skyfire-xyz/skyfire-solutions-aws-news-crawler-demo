@@ -94,6 +94,10 @@ CloudFront's control plane is hosted exclusively in this region, and all edge fu
 
 ![lambda function creation](../static/images/cloudfront-waf/create-lambda.png)
 
+Set the Lambda@Edge function trigger from Cloudfront
+
+![viewer request lambda](../static/images/cloudfront-waf/viewer-request-lambda.png)
+
 ![associate lambda function with cloudfront](../static/images/cloudfront-waf/associate-lambda.png)
 
 3. Configure Web ACL security on CloudFront Distribution
