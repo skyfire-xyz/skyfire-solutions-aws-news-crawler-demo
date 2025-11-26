@@ -80,8 +80,11 @@ This typically requires:
 Configure your origin, cache policy, and any required behaviors based on your application architecture.
 
 ![cloudfront distribution creation step 1](../static/images/cloudfront-waf/create-distribution-1.png)
+
 ![cloudfront distribution creation step 2](../static/images/cloudfront-waf/create-distribution-2.png)
+
 ![cloudfront distribution creation step 3](../static/images/cloudfront-waf/create-distribution-3.png)
+
 ![cloudfront distribution creation step 4](../static/images/cloudfront-waf/create-distribution-4.png)
 
 2. Create a Lambda@Edge Function - 
@@ -90,6 +93,7 @@ Lambda@Edge functions must be created in the N. Virginia (us-east-1) region.
 CloudFront's control plane is hosted exclusively in this region, and all edge function replication begins from here. More details [here](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-edge-how-it-works-tutorial.html).
 
 ![lambda function creation](../static/images/cloudfront-waf/create-lambda.png)
+
 ![associate lambda function with cloudfront](../static/images/cloudfront-waf/associate-lambda.png)
 
 3. Configure Web ACL security on CloudFront Distribution

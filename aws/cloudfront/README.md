@@ -22,8 +22,11 @@ If your environment requires advanced security (bot mitigation, IP filtering, ra
 1. Create a CloudFront Distribution
 Configure your origin, cache policy, and any required behaviors based on your application architecture.
 ![cloudfront distribution creation step 1](../static/images/cloudfront/create-distribution-1.png)
+
 ![cloudfront distribution creation step 2](../static/images/cloudfront/create-distribution-2.png)
+
 ![cloudfront distribution creation step 3](../static/images/cloudfront/create-distribution-3.png)
+
 ![cloudfront distribution creation step 4](../static/images/cloudfront/create-distribution-4.png)
 
 2. Create a Lambda@Edge Function

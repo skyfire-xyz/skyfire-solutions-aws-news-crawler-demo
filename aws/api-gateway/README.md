@@ -34,6 +34,7 @@ Note: API Gateway supports one authorizer per route. If you need multiple layers
 1. Create a REST API Gateway 
 
 ![create rest api gateway step 1](../static/images/api-gateway/create-api-gateway-rest-1.png)
+
 ![create rest api gateway step 2](../static/images/api-gateway/create-api-gateway-rest-2.png)
 
 Create resources and methods based on your endpoint requirements
@@ -49,4 +50,5 @@ Sample Lambda Authorizer code for API Gateway cann be found [here](../api-gatewa
 3. Associate the Lambda Authorizer with the created API Gateway
 
 ![associate lambda](../static/images/api-gateway/associate-lambda.png)
+
 ![associated lambda linked in api gateway](../static/images/api-gateway/associate-lambda-2.png)
