@@ -61,13 +61,13 @@ const suggestions: Suggestion[] = [
   },
   { url: "https://mock-news-site-aws-api-gateway.skyfire.xyz/", name: "MockNews (API Gateway)", type: "Protected" }, //https://ac8t87if5a.execute-api.us-east-1.amazonaws.com/dev/article
   {
-    url: "https://vmqjil4y49.execute-api.us-east-1.amazonaws.com/dev/article", //https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/dev/article/
+    url: "https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/", //"https://vmqjil4y49.execute-api.us-east-1.amazonaws.com/dev/article",
     name: "MockNews (API Gateway + WAF)",
     type: "Protected",
   },
-  { url: "https://dex1j9lx64e98.cloudfront.net/", name: "MockNews (CloudFront)", type: "Protected" }, //https://mock-news-site-aws-cloudfront.skyfire.xyz/
+  { url: "https://mock-news-site-aws-cloudfront.skyfire.xyz/", name: "MockNews (CloudFront)", type: "Protected" }, //https://dex1j9lx64e98.cloudfront.net/
   {
-    url: "https://dex4cbi52l5ce.cloudfront.net/", //https://mock-news-site-aws-cloudfront-waf.skyfire.xyz/
+    url: "https://mock-news-site-aws-cloudfront-waf.skyfire.xyz/", //https://dex4cbi52l5ce.cloudfront.net/
     name: "MockNews (CloudFront + WAF)",
     type: "Protected",
   },
@@ -86,7 +86,7 @@ const botTypes: BotTypes[] = [
     userAgent: "GPTBot/1.0 (+https://www.gptbot.ai/)",
   },
   { type: "Prohibited bot", description: "Access not authorized at all",
-    userAgent: "Mozilla/5.0 (compatible; archive.org_bot +archive.org)" //InternetArchiveBot/2.0 (www.archive.org)
+    userAgent: "Mozilla/5.0 (compatible; archive.org_bot +archive.org)"
    },
 ]
 
@@ -120,7 +120,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const selectedUrl = form.watch("url")
   const showBotDropdown = [
     "https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/", //"https://vmqjil4y49.execute-api.us-east-1.amazonaws.com/dev/article", 
-    "https://dex4cbi52l5ce.cloudfront.net/", //"https://mock-news-site-aws-cloudfront-waf.skyfire.xyz/"
+    "https://mock-news-site-aws-cloudfront-waf.skyfire.xyz/", //"https://dex4cbi52l5ce.cloudfront.net/",
   ].includes(selectedUrl)
 
   // clear botType when bot dropdown shouldn't be shown
