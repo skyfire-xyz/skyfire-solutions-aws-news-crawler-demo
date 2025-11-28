@@ -118,7 +118,7 @@ In this sample, we have directly allowed **`CategorySeo`** & **`CategorySearchEn
 
 2. Bots with Skyfire Token - 
 
-    We can configure this rule using labels from `AWSManagedRulesBotControlRuleSet`. All monitored and permissible bot categories from previous rule for allowing access to certain bot categories with valid Skyfire KYA Token - [!Configured list](../static/images/cloudfront-waf/cloudfront-waf-bots-require-skyfire-token.png)
+    We can configure this rule using labels from `AWSManagedRulesBotControlRuleSet`. All monitored and permissible bot categories from previous rule for allowing access to certain bot categories with valid Skyfire KYA Token - ![Configured list](../static/images/cloudfront-waf/cloudfront-waf-bots-require-skyfire-token.png)
 
     In this sample, we've configured `awswaf:managed:aws:bot-control:bot:category:ai` and `awswaf:managed:aws:bot-control:bot:category:scraping_framework` to be allowed only when there is a valid Skyfire KYA token by adding a `SkyfireTokenRequired` label to all bot requests that match this rule condition.
 

@@ -11,7 +11,7 @@ AWS API Gateway provides managed REST, HTTP, and WebSocket APIs with:
 
 ## Authorizers in API Gateway
 
-In AWS API Gateway there are authorizers which act as security features used to control access to API endpoints. They function by verifying the authorization status of a request before it reaches the backend service.
+In AWS API Gateway there are authorizers which act as security features used to control access to API endpoints. They function by verifying the authorization status of a request before it reaches the backend service. Authorizers are associated with routes in API Gateway.
 
 ### Authorizer Types
 1. ❌ JWT Authorizer
@@ -45,7 +45,7 @@ Create resources and methods based on your endpoint requirements
 
 ![create lambda](../static/images/api-gateway/create-lambda.png)
 
-Sample Lambda Authorizer code for API Gateway cann be found [here](../api-gateway/lambda-authorizer/)
+Sample Lambda Authorizer code for API Gateway can be found [here](../api-gateway/lambda-authorizer/)
 
 3. Associate the Lambda Authorizer with the created API Gateway
 
