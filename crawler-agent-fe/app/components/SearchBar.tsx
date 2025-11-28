@@ -140,11 +140,15 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const selectedUrl = form.watch("url")
 
   useEffect(() => {
-    if (typeof onAwsUrlChange === "function") {
-      onAwsUrlChange(selectedUrl)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedUrl])
+      // reset bot category when URL changes
+      form.setValue("botType", "")
+      if (typeof onAwsUrlChange === "function") {
+        onAwsUrlChange(selectedUrl)
+      }
+      setSelectedBotIndex(-1)
+      setIsBotFocused(false)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedUrl])
 
   const showBotDropdown = [
     "https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/", 
