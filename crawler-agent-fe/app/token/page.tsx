@@ -170,7 +170,7 @@ export default function CrawlWithTokenPage() {
                                 <div className="mt-8">
                                     <h2 className="mb-4 text-xl font-semibold text-gray-900">Step 3: Select website to crawl</h2>
                                         <div className="mt-6">
-                                        <CrawlSearchLog skyfireKyaToken={kyaToken} onAwsUrlChange={setSelectedUrl} />
+                                        <CrawlSearchLog pageRoute={"/token"} skyfireKyaToken={kyaToken} onAwsUrlChange={setSelectedUrl} />
                                     </div>
                                 </div>
                             </>

@@ -26,6 +26,7 @@ interface SearchBarProps {
   setAlerts: React.Dispatch<React.SetStateAction<Alert[]>>
   skyfireKyaToken?: string
   onAwsUrlChange?: (url: string) => void
+  pageRoute: string 
 }
 
 // Define the form schema with Zod
@@ -74,19 +75,25 @@ const suggestions: Suggestion[] = [
   },
 ]
 
-const botTypes: BotTypes[] = [
+const WithTokenBotTypes: BotTypes[] = [
   {
-    type: "Allowed bot",
+    type: "Bot with Skyfire Identity - Allowed",
+    description: "Requires Skyfire KYA Token to access protected content",
+    userAgent: "GPTBot/1.0 (+https://www.gptbot.ai/)",
+  },
+  { type: "Bot with Skyfire Identity - Not Allowed", description: "Access not authorized at all",
+    userAgent: "Mozilla/5.0 (compatible; archive.org_bot +archive.org)"
+   },
+]
+
+const WithoutTokenBotTypes: BotTypes[] = [
+  {
+    type: "Identified and Allowed Bot",
     description:
       "Open access to protected content for Search Engine Bot (google/bing etc)",
     userAgent: "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
   },
-  {
-    type: "Acceptable Skyfire bot",
-    description: "Requires Skyfire KYA Token to access protected content",
-    userAgent: "GPTBot/1.0 (+https://www.gptbot.ai/)",
-  },
-  { type: "Prohibited bot", description: "Access not authorized at all",
+  { type: "Unidentified Bot", description: "No access",
     userAgent: "Mozilla/5.0 (compatible; archive.org_bot +archive.org)"
    },
 ]
@@ -99,9 +106,20 @@ const SearchBar: React.FC<SearchBarProps> = ({
   setAlerts,
   skyfireKyaToken,
   onAwsUrlChange,
+  pageRoute,
 }) => {
   const [kyaToken, setKyaToken] = useState<string>(skyfireKyaToken || "")
   const [isLoading, setIsLoading] = useState(false)
+  const [botTypes, setBotTypes] = useState<BotTypes[]>([])
+
+  useEffect(() => {
+    if (pageRoute === "/") {
+    setBotTypes(WithoutTokenBotTypes);
+  }
+  else if (pageRoute === "/token") {
+    setBotTypes(WithTokenBotTypes);
+  }
+}, [])
 
   const [isUrlFocused, setIsUrlFocused] = useState(false)
   const [selectedUrlIndex, setSelectedUrlIndex] = useState(-1)
