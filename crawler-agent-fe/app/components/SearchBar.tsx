@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios from "axios"
 import { useForm } from "react-hook-form"
@@ -25,6 +25,7 @@ interface SearchBarProps {
   inputPayment?: string
   setAlerts: React.Dispatch<React.SetStateAction<Alert[]>>
   skyfireKyaToken?: string
+  onAwsUrlChange?: (url: string) => void
 }
 
 // Define the form schema with Zod
@@ -59,15 +60,15 @@ const suggestions: Suggestion[] = [
     name: "MockNews",
     type: "Protected",
   },
-  { url: "https://mock-news-site-aws-api-gateway.skyfire.xyz/", name: "MockNews (API Gateway)", type: "Protected" }, //https://ac8t87if5a.execute-api.us-east-1.amazonaws.com/dev/article
+  { url: "https://mock-news-site-aws-api-gateway.skyfire.xyz/", name: "MockNews (API Gateway)", type: "Protected" },
   {
-    url: "https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/", //"https://vmqjil4y49.execute-api.us-east-1.amazonaws.com/dev/article",
+    url: "https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/",
     name: "MockNews (API Gateway + WAF)",
     type: "Protected",
   },
-  { url: "https://mock-news-site-aws-cloudfront.skyfire.xyz/", name: "MockNews (CloudFront)", type: "Protected" }, //https://dex1j9lx64e98.cloudfront.net/
+  { url: "https://mock-news-site-aws-cloudfront.skyfire.xyz/", name: "MockNews (CloudFront)", type: "Protected" }, 
   {
-    url: "https://mock-news-site-aws-cloudfront-waf.skyfire.xyz/", //https://dex4cbi52l5ce.cloudfront.net/
+    url: "https://mock-news-site-aws-cloudfront-waf.skyfire.xyz/",
     name: "MockNews (CloudFront + WAF)",
     type: "Protected",
   },
@@ -97,6 +98,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   inputPayment,
   setAlerts,
   skyfireKyaToken,
+  onAwsUrlChange,
 }) => {
   const [kyaToken, setKyaToken] = useState<string>(skyfireKyaToken || "")
   const [isLoading, setIsLoading] = useState(false)
@@ -118,9 +120,17 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   // watch selected url to decide whether to show bot dropdown
   const selectedUrl = form.watch("url")
+
+  useEffect(() => {
+    if (typeof onAwsUrlChange === "function") {
+      onAwsUrlChange(selectedUrl)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedUrl])
+
   const showBotDropdown = [
-    "https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/", //"https://vmqjil4y49.execute-api.us-east-1.amazonaws.com/dev/article", 
-    "https://mock-news-site-aws-cloudfront-waf.skyfire.xyz/", //"https://dex4cbi52l5ce.cloudfront.net/",
+    "https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/", 
+    "https://mock-news-site-aws-cloudfront-waf.skyfire.xyz/",
   ].includes(selectedUrl)
 
   // clear botType when bot dropdown shouldn't be shown
@@ -244,9 +254,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         `${process.env.NEXT_PUBLIC_SERVICE_BASE_URL}/crawl/stop`,
         { channelId: channelId }
       )
-      // setAlerts([{ type: AlertType.INFO, message: "Crawling stopped." }]);
     } catch (err) {
-      // setAlerts([{ type: AlertType.INVALID, message: "Failed to stop crawling." }]);
       console.error("Stop error:", err)
     }
   }
