@@ -1,4 +1,5 @@
 import { CheerioCrawler, RequestQueue } from "crawlee";
+import crypto from 'crypto'
 import {
   DEFAULT_DEPTH,
   DEFAULT_REQUESTS,
@@ -41,7 +42,7 @@ export async function crawlWebsite({
   inputRequests = inputRequests > MAX_REQUESTS ? MAX_REQUESTS : inputRequests;
   inputDepth = inputDepth > MAX_DEPTH ? MAX_DEPTH : inputDepth;
   const results: PageResult[] = [];
-  const requestQueue = await RequestQueue.open();
+  const requestQueue = await RequestQueue.open(crypto.randomUUID());
   const startTimeOverall = Date.now();
   let totalTraversalSizeBytes = 0;
 
