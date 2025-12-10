@@ -88,9 +88,6 @@ export default function TopBar({ selectedUrl, showAwsLink: showAwsLinkProp }: To
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-lg bg-gray-800 px-4 py-2 text-sm text-white transition hover:bg-gray-700"
               >
-                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                </svg>
                 AWS Reference Implementation: GitHub
               </a>
             </div>
