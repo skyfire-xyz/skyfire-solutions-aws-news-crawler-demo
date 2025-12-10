@@ -35,7 +35,6 @@ const NavTabs: React.FC = () => {
             }`}
             onClick={() => router.push(tab.route)}
           >
-            {tab.icon}
             {tab.label}
           </button>
         )
