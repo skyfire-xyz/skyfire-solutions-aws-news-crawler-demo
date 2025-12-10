@@ -12,4 +12,4 @@ Refer folder based on your architecture for more details:
 ## 2. API Gateway-Based Architecture
 
 2.1 [API Gateway using Lambda Authorizer](/aws/api-gateway/)
-2.1 [API Gateway with WAF using Lambda Authorizer](/aws/api-gateway-waf/)
+2.2 [API Gateway with WAF using Lambda Authorizer](/aws/api-gateway-waf/)

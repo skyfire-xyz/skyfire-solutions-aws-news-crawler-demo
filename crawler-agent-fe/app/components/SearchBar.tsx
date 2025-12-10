@@ -48,7 +48,7 @@ interface Suggestion {
   type: string
 }
 
-interface BotTypes {
+export interface BotTypes {
   type: string
   description: string
   userAgent: string
@@ -75,7 +75,7 @@ const suggestions: Suggestion[] = [
   },
 ]
 
-const WithTokenBotTypes: BotTypes[] = [
+export const WithTokenBotTypes: BotTypes[] = [
   {
     type: "Bot with Skyfire Identity - Allowed",
     description: "Requires Skyfire KYA Token to access protected content",
@@ -86,7 +86,7 @@ const WithTokenBotTypes: BotTypes[] = [
    },
 ]
 
-const WithoutTokenBotTypes: BotTypes[] = [
+export const WithoutTokenBotTypes: BotTypes[] = [
   {
     type: "Identified and Allowed Bot",
     description:
