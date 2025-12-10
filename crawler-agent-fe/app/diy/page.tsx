@@ -602,21 +602,6 @@ export default function DIYPage() {
                               ) : (
                                 <>
                                   <p className="text-gray-600 mb-4">
-                                    Now use the
-                                    KYA token from Step 3 to access the protected
-                                    website. Replace{" "}
-                                    <code className="bg-gray-200 px-1 rounded">
-                                      KYA_TOKEN
-                                    </code>{" "}
-                                    with the actual KYA token you received. The
-                                    request will successfully access the protected
-                                    site using the{" "}
-                                    <code className="bg-gray-200 px-1 rounded">
-                                      skyfire-pay-id
-                                    </code>{" "}
-                                    header.
-                                  </p>
-                                  <p className="text-gray-600 mb-4">
                                     Now use the KYA token from Step 3 to access the
                                     protected website. Replace{" "}
                                     <code className="bg-gray-200 px-1 rounded">
