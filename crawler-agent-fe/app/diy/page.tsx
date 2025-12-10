@@ -16,18 +16,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
-// export const WithoutTokenBotTypes = [
-//   {
-//     type: "Identified and Allowed Bot",
-//     description:
-//       "Open access to protected content for Search Engine Bot (google/bing etc)",
-//     userAgent: "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
-//   },
-//   { type: "Unidentified Bot", description: "No access",
-//     userAgent: "Mozilla/5.0 (compatible; archive.org_bot +archive.org)"
-//    },
-// ]
-
 const AWS_URLS = [
   {
     name: "API Gateway",
