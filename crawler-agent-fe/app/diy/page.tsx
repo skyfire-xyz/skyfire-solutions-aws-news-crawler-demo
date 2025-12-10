@@ -323,17 +323,6 @@ export default function DIYPage() {
                     </code>{" "}
                     header.
                   </p>
-                  <p className="text-gray-600 mb-4">
-                    Now use the KYA token from Step 3 to access the protected
-                    website. Replace{" "}
-                    <code className="bg-gray-200 px-1 rounded">KYA_TOKEN</code>{" "}
-                    with the actual KYA token you received. The request will
-                    successfully access the protected site using the{" "}
-                    <code className="bg-gray-200 px-1 rounded">
-                      skyfire-pay-id
-                    </code>{" "}
-                    header.
-                  </p>
                   <div className="bg-gray-900 text-green-400 p-6 rounded-lg font-mono text-sm overflow-x-auto relative">
                     <CopyButton text={step4Curl} />
                     <pre className="whitespace-pre-wrap break-all pr-20">
@@ -577,15 +566,6 @@ export default function DIYPage() {
                               {bot.type ===
                               "Bot with Skyfire Identity - Not Allowed" ? (
                                 <>
-                                  <p className="text-gray-600 mb-4">
-                                    Now use the
-                                    KYA token from Step 3 to access the protected
-                                    website. Replace{" "}
-                                    <code className="bg-gray-200 px-1 rounded">
-                                      KYA_TOKEN
-                                    </code>{" "}
-                                    with the actual KYA token you received. 
-                                  </p>
                                   <p className="text-gray-600 mb-4">
                                     Now use the KYA token from Step 3 to access the
                                     protected website. Replace{" "}
