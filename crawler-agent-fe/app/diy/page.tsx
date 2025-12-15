@@ -4,12 +4,6 @@ import { useState } from "react"
 
 import PageLayout from "../components/PageLayout"
 import TopBar from "../components/TopBar"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 
 const AWS_URLS = [
   {

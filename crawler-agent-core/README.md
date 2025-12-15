@@ -61,18 +61,14 @@ export function skyfireKyaTokenHook(token: string) {
     crawlingContext.request.headers = {
       ...crawlingContext.request.headers,
       "skyfire-pay-id": token ?? "",
-      "x-isbot": "true",
     };
     gotOptions.headers = {
       ...gotOptions.headers,
       "skyfire-pay-id": token ?? "",
-      "x-isbot": "true",
     };
   };
 }
 ```
-
-The `x-isbot: true` header is used in this demo to help protected sites distinguish between human and automated traffic. In a real-world production environment, more sophisticated bot detection mechanisms would typically be employed.
 
 #### Usage of the Hook with CheerioCrawler
 
