@@ -23,14 +23,12 @@ export async function crawlWebsite({
   inputRequests = DEFAULT_REQUESTS,
   inputDepth = DEFAULT_DEPTH,
   skyfireKyaToken,
-  userAgent,
 }: {
   startUrl: string;
   channelId: string;
   inputRequests?: number;
   inputDepth?: number;
   skyfireKyaToken?: string;
-  userAgent?: string;
 }): Promise<CrawlResult> {
   try {
     const sUrl = new URL(startUrl);
@@ -47,7 +45,8 @@ export async function crawlWebsite({
   let totalTraversalSizeBytes = 0;
 
   requestQueue.timeoutSecs = 5;
-  console.log(`Starting crawl for ${startUrl}...`);
+  console.log(`Starting crawl for ${startUrl}...`);  
+  
   await requestQueue.addRequest({ url: startUrl, userData: { depth: 0 } });
 
   let crawler: CheerioCrawler;
@@ -57,7 +56,7 @@ export async function crawlWebsite({
     maxRequestRetries: 0,
     requestHandlerTimeoutSecs: 5,
     additionalMimeTypes: ["application/json"],
-    preNavigationHooks: [skyfireKyaTokenHook(skyfireKyaToken, userAgent)],
+    preNavigationHooks: [skyfireKyaTokenHook(skyfireKyaToken)],
     sessionPoolOptions: {
       blockedStatusCodes: [],
     },

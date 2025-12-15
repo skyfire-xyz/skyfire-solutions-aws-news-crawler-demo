@@ -1,13 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { userAgent } from "next/server"
 
 import PageLayout from "../components/PageLayout"
-import {
-  WithTokenBotTypes,
-  WithoutTokenBotTypes,
-} from "../components/SearchBar"
 import TopBar from "../components/TopBar"
 import {
   Accordion,
