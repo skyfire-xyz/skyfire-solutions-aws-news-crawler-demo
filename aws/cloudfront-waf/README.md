@@ -113,7 +113,7 @@ In this sample, we have directly allowed **`CategorySeo`** & **`CategorySearchEn
     We can configure this rule using labels from `AWSManagedRulesBotControlRuleSet`. All unverified and automated requests categories of bot from previous rule are labeled as `IsAutomatedUnverifiedResponse`. 
     ![IsAutomatedUnverifiedResponse](../static/images/cloudfront-waf/cloudfront-waf-automated-unverified-response.png)
 
-    ```
+```
     //JSON view
 
 {
@@ -171,9 +171,9 @@ In this sample, we have directly allowed **`CategorySeo`** & **`CategorySearchEn
 }
 ```
     
-    For blocking access to these unverified bots without valid Skyfire KYA Token - ![BlockAutomatedRequestsWithoutSkyfireToken](../static/images/cloudfront-waf/cloudfront-waf-bots-require-skyfire-token.png)
+For blocking access to these unverified bots without valid Skyfire KYA Token - ![BlockAutomatedRequestsWithoutSkyfireToken](../static/images/cloudfront-waf/cloudfront-waf-bots-require-skyfire-token.png)
 
-    ```
+```
     // JSON view
     {
     "Action": {
