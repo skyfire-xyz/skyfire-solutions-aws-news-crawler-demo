@@ -322,5 +322,8 @@ In the last `CheckIfHumanTraffic` rule, we Challenge the request. If a particula
 }
 ```
 
-Note: WAF rules can be reordered to meet business logic requirements.
-Note: Depending on the use-case, these rules are entirely configurable and extendable - any bot categories can be set up for allow or blocking directly by WAF bot manager itself. 
+Note: 
+
+1. WAF rules can be reordered to meet business logic requirements.
+
+2. Depending on the use-case, these rules are entirely configurable and extendable - any bot categories can be set up for allow or blocking directly by WAF bot manager itself. 
