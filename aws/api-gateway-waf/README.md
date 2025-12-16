@@ -48,25 +48,25 @@ AWS WAF lets you control access to your content. Based on conditions that you sp
 
 The client needs to classify bots into 3 categories:
 
-1. Requests categorized as a “recognised bot” such as SEO (Googlebot), AI scrapers (GPTBot), Archiver bots etc -> decide and configure what to do
+1. Requests categorized as a “recognised bot” such as SEO (Googlebot), AI scrapers (GPTBot), Archiver bots etc -> decide and configure what to do (individually Allow/Block as per use-case)
 
 2. Requests from "unrecognised bot" -> 
     - Skyfire KYA token is mandatory for access
     - If Skyfire token is missing or invalid, then block
 
-3. Requests not recognised as bots (human traffic) -> Allow access to protected website even without token
+3. Requests not recognised as bots (human traffic) -> Allow access to protected website without token
 
 ##### Important Requirement
 
 ```
-Bot logic + Skyfire token logic must both be considered before allowing access.
+Bot identification logic + Skyfire token logic must both be considered before allowing access.
 ```
 
 This typically requires:
 - Correct priority ordering of WAF rules
 - Using WAF labels or rule groups
 - Ensuring Skyfire-related logic happens after bot evaluation
-- Ensuring Lambda Authorizer logic fires for bots with token
+- Ensuring Lambda Authorizer logic validates the token if present
 
 ## API Gateway + WAF
 

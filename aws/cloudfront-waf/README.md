@@ -45,25 +45,25 @@ Note: When using AWS WAF, WAF evaluates the request before your Viewer Request L
 
 The client needs to classify bots into 3 categories:
 
-1. Requests categorized as a “recognised bot” such as SEO (Googlebot), AI scrapers (GPTBot), Archiver bots etc -> decide and configure what to do
+1. Requests categorized as a “recognised bot” such as SEO (Googlebot), AI scrapers (GPTBot), Archiver bots etc -> decide and configure what to do (individually Allow/Block as per use-case)
 
 2. Requests from "unrecognised bot" -> 
     - Skyfire KYA token is mandatory for access
     - If Skyfire token is missing or invalid, then block
 
-3. Requests not recognised as bots (human traffic) -> Allow access to protected website even without token
+3. Requests not recognised as bots (human traffic) -> Allow access to protected website without token
 
 ##### Important Requirement
 
 ```
-Bot logic + Skyfire token logic must both be considered before allowing access.
+Bot identification logic + Skyfire token logic must both be considered before allowing access.
 ```
 
 This typically requires:
 - Correct priority ordering of WAF rules
 - Using WAF labels or rule groups
 - Ensuring Skyfire-related logic happens after bot evaluation
-- Ensuring Lambda@Edge logic fires for bots with token
+- Ensuring Lambda@Edge logic validates the token if present
 
 #### Deployment Steps
 1. Create a CloudFront Distribution -
@@ -92,6 +92,7 @@ Set the Lambda@Edge function trigger from Cloudfront
 ![associate lambda function with cloudfront](../static/images/cloudfront-waf/associate-lambda.png)
 
 3. Configure Web ACL security on CloudFront Distribution
+
 Let's establish WAF rules in order to accomplish the above discussed requirement - 
 
 ![web-acl-configuration](../static/images/cloudfront-waf/web-acl-configuration.png)
@@ -115,7 +116,7 @@ In this sample, we have directly allowed **`CategorySeo`** & **`CategorySearchEn
     ```
     //JSON view
 
-    {
+{
     "Action": {
         "Count": {}
     },
@@ -168,7 +169,7 @@ In this sample, we have directly allowed **`CategorySeo`** & **`CategorySearchEn
         "SampledRequestsEnabled": true
     }
 }
-    ```
+```
     
     For blocking access to these unverified bots without valid Skyfire KYA Token - ![BlockAutomatedRequestsWithoutSkyfireToken](../static/images/cloudfront-waf/cloudfront-waf-bots-require-skyfire-token.png)
 
@@ -223,7 +224,7 @@ In this sample, we have directly allowed **`CategorySeo`** & **`CategorySearchEn
         "SampledRequestsEnabled": true
     }
 }
-    ```
+```
 
 A custom response can be set when WAF blocks requests to origin server
 ![cloudfront-waf-skyfire-decisioning-2](../static/images/cloudfront-waf/cloudfront-waf-skyfire-decisioning-2.png)
