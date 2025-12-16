@@ -27,7 +27,7 @@ In AWS API Gateway there are authorizers which act as security features used to 
 
 Note: API Gateway supports one authorizer per route. If you need multiple layers of validation, you must implement them inside your Lambda Authorizer.
 
-[!API Gateway Sequence Diagram](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/SKYK-930-aws-integration/platforms/aws/cloudfront-waf)
+![API Gateway Sequence Diagram](/aws/static/images/api-gateway/api-gateway-seq-diag.png)
 
 ## Deployment Steps
 

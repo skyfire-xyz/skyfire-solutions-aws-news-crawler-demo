@@ -16,7 +16,7 @@ Lambda@Edge functions can be invoked during four event phases:
 
 A CloudFront distribution can attach one Lambda function per event type.
 
-[Sample Lambda@Edge Function](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/blob/SKYK-930-aws-integration/platforms/aws/cloudfront-waf/lambda%40edge/index.mjs) for Skyfire Token Verification
+[Sample Lambda@Edge Function](../cloudfront-waf/lambda@edge/index.mjs) for Skyfire Token Verification
 
 Note: This sample uses a Viewer Request event, so the token validation happens before cache evaluation.
 
@@ -45,34 +45,25 @@ Note: When using AWS WAF, WAF evaluates the request before your Viewer Request L
 
 The client needs to classify bots into 3 categories:
 
-1. Allowed Bots (no Skyfire token required)
-Examples:
-- Googlebot
-- Bingbot
-These should bypass Skyfire logic if verified as good bots.
+1. Requests categorized as a “recognised bot” such as SEO (Googlebot), AI scrapers (GPTBot), Archiver bots etc -> decide and configure what to do (individually Allow/Block as per use-case)
 
-2. Bots with Skyfire Token
-- Acceptable: These must present a valid Skyfire token. If a token is missing or invalid, then block.
-- Non-acceptable: Even if a Skyfire token is present, these should not override other WAF security rules.
+2. Requests from "unrecognised bot" -> 
+    - Skyfire KYA token is mandatory for access
+    - If Skyfire token is missing or invalid, then block
 
-Examples:
-- AI scrapers
-- Automated crawlers
-
-3. Unidentified bots (which don’t present Skyfire token)
+3. Requests not recognised as bots (human traffic) -> Allow access to protected website without token
 
 ##### Important Requirement
 
 ```
-Bot classification should not prevent the Skyfire token verification rule from running.
-Bot logic + Skyfire token logic must both be considered before allowing access.
+Bot identification logic + Skyfire token logic must both be considered before allowing access.
 ```
 
 This typically requires:
 - Correct priority ordering of WAF rules
 - Using WAF labels or rule groups
 - Ensuring Skyfire-related logic happens after bot evaluation
-- Ensuring Lambda@Edge logic still fires for acceptable bot types
+- Ensuring Lambda@Edge logic validates the token if present
 
 #### Deployment Steps
 1. Create a CloudFront Distribution -
@@ -101,11 +92,12 @@ Set the Lambda@Edge function trigger from Cloudfront
 ![associate lambda function with cloudfront](../static/images/cloudfront-waf/associate-lambda.png)
 
 3. Configure Web ACL security on CloudFront Distribution
+
 Let's establish WAF rules in order to accomplish the above discussed requirement - 
 
 ![web-acl-configuration](../static/images/cloudfront-waf/web-acl-configuration.png)
 
-1. Allowed bots - 
+1. Requests categorized as a "recognised bot" - 
 
 **`AWSManagedRulesBotControlRuleSet`** categorises bot requests into various categories and adds corresponding category labels (which can be used to target particular category of bots in the following rules). 
 
@@ -116,24 +108,23 @@ We have the capability to choose one of allow, block, count, challenge for each 
 In this sample, we have directly allowed **`CategorySeo`** & **`CategorySearchEngine`** from this rule
 ![WAF Rules for allowing SearchEngine and SEO bot categories](../static/images/cloudfront-waf/cloudfront-waf-allowed-bots.png)
 
-2. Bots with Skyfire Token - 
+2. Requests from "unrecognised bot" - 
 
-    We can configure this rule using labels from `AWSManagedRulesBotControlRuleSet`. All monitored and permissible bot categories from previous rule for allowing access to certain bot categories with valid Skyfire KYA Token - ![Configured list](../static/images/cloudfront-waf/cloudfront-waf-bots-require-skyfire-token.png)
+    We can configure this rule using labels from `AWSManagedRulesBotControlRuleSet`. All unverified and automated requests categories of bot from previous rule are labeled as `IsAutomatedUnverifiedResponse`. 
+    ![IsAutomatedUnverifiedResponse](../static/images/cloudfront-waf/cloudfront-waf-automated-unverified-response.png)
 
-    In this sample, we've configured `awswaf:managed:aws:bot-control:bot:category:ai` and `awswaf:managed:aws:bot-control:bot:category:scraping_framework` to be allowed only when there is a valid Skyfire KYA token by adding a `SkyfireTokenRequired` label to all bot requests that match this rule condition.
+```
+    //JSON view
 
-    ```
-    // JSON view
-
-    {
+{
     "Action": {
         "Count": {}
     },
-    "Name": "BotsRequireSkyfireToken",
-    "Priority": 7,
+    "Name": "IsAutomatedUnverifiedRequest",
+    "Priority": 9,
     "RuleLabels": [
         {
-            "Name": "SkyfireTokenRequired"
+            "Name": "IsAutomatedUnverifiedRequest"
         }
     ],
     "Statement": {
@@ -141,13 +132,31 @@ In this sample, we have directly allowed **`CategorySeo`** & **`CategorySearchEn
             "Statements": [
                 {
                     "LabelMatchStatement": {
-                        "Key": "awswaf:managed:aws:bot-control:bot:category:ai",
+                        "Key": "awswaf:managed:aws:bot-control:bot:unverified",
                         "Scope": "LABEL"
                     }
                 },
                 {
                     "LabelMatchStatement": {
-                        "Key": "awswaf:managed:aws:bot-control:bot:category:scraping_framework",
+                        "Key": "awswaf:managed:aws:bot-control:signal:non_browser_user_agent",
+                        "Scope": "LABEL"
+                    }
+                },
+                {
+                    "LabelMatchStatement": {
+                        "Key": "awswaf:managed:aws:bot-control:signal:automated_browser",
+                        "Scope": "LABEL"
+                    }
+                },
+                {
+                    "LabelMatchStatement": {
+                        "Key": "awswaf:managed:aws:bot-control:targeted:signal:automated_browser",
+                        "Scope": "LABEL"
+                    }
+                },
+                {
+                    "LabelMatchStatement": {
+                        "Key": "awswaf:managed:aws:bot-control:targeted:signal:browser_automation_extension",
                         "Scope": "LABEL"
                     }
                 }
@@ -160,35 +169,29 @@ In this sample, we have directly allowed **`CategorySeo`** & **`CategorySearchEn
         "SampledRequestsEnabled": true
     }
 }
-    ```
-
-In the last `SkyfireDecisioning` rule, we block the request, if a particular bot request has an associated `SkyfireTokenRequired` label but doesn't have a `skyfire-pay-id` JWT in the request header. 
-
-![cloudfront-waf-skyfire-decisioning-1](../static/images/cloudfront-waf/cloudfront-waf-skyfire-decisioning-1.png)
-
-A custom response can be set when WAF blocks requests to origin server
-![cloudfront-waf-skyfire-decisioning-2](../static/images/cloudfront-waf/cloudfront-waf-skyfire-decisioning-2.png)
+```
+    
+For blocking access to these unverified bots without valid Skyfire KYA Token - ![BlockAutomatedRequestsWithoutSkyfireToken](../static/images/cloudfront-waf/cloudfront-waf-bots-require-skyfire-token.png)
 
 ```
-JSON view
-
-{
+    // JSON view
+    {
     "Action": {
         "Block": {
             "CustomResponse": {
-                "CustomResponseBodyKey": "missing-KYA-token-error",
+                "CustomResponseBodyKey": "missing-skyfire-KYA-error",
                 "ResponseCode": 401
             }
         }
     },
-    "Name": "SkyfireDecisioning",
-    "Priority": 8,
+    "Name": "BlockIfAutomatedRequestWithNoSkyfireToken",
+    "Priority": 10,
     "Statement": {
         "AndStatement": {
             "Statements": [
                 {
                     "LabelMatchStatement": {
-                        "Key": "SkyfireTokenRequired",
+                        "Key": "IsAutomatedUnverifiedRequest",
                         "Scope": "LABEL"
                     }
                 },
@@ -217,11 +220,86 @@ JSON view
     },
     "VisibilityConfig": {
         "CloudWatchMetricsEnabled": true,
-        "MetricName": "SkyfireDecisioning",
+        "MetricName": "ChallengeIfUnverifieBotWithNoSkyfireToken",
         "SampledRequestsEnabled": true
     }
 }
 ```
 
-Note: WAF rules can be reordered to meet business logic requirements.
-Note: Depending on the use-case, these rules are entirely configurable and extendable (including list for **`BotsRequireSkyfireToken`**) - any bot categories can be set up for allow or blocking directly by WAF bot manager itself, and any other for monitoring to apply custom rule later in the priority order. 
+A custom response can be set when WAF blocks requests to origin server
+![cloudfront-waf-skyfire-decisioning-2](../static/images/cloudfront-waf/cloudfront-waf-skyfire-decisioning-2.png)
+
+3. Requests not recognised as bots (human traffic)
+
+In the last `CheckIfHumanTraffic` rule, we Challenge the request. If a particular request isn't a verified or unverified bot and also doesn't have a `skyfire-pay-id` header, a challenge is issued. When the request comes from a human using a browser, the JavaScript challenge is executed in the browser and successfully completed. In contrast, non-human clients (bots) typically do not execute JavaScript and therefore fail to pass the challenge.
+
+![cloudfront-waf-skyfire-decisioning-1](../static/images/cloudfront-waf/cloudfront-waf-check-if-human.png)
+
+```
+JSON view
+
+{
+    "Action": {
+        "Challenge": {}
+    },
+    "Name": "CheckIfHumanTraffic",
+    "Priority": 12,
+    "Statement": {
+        "AndStatement": {
+            "Statements": [
+                {
+                    "NotStatement": {
+                        "Statement": {
+                            "LabelMatchStatement": {
+                                "Key": "awswaf:managed:aws:bot-control:bot:verified",
+                                "Scope": "LABEL"
+                            }
+                        }
+                    }
+                },
+                {
+                    "NotStatement": {
+                        "Statement": {
+                            "LabelMatchStatement": {
+                                "Key": "IsAutomatedUnverifiedRequest",
+                                "Scope": "LABEL"
+                            }
+                        }
+                    }
+                },
+                {
+                    "NotStatement": {
+                        "Statement": {
+                            "RegexMatchStatement": {
+                                "FieldToMatch": {
+                                    "SingleHeader": {
+                                        "Name": "skyfire-pay-id"
+                                    }
+                                },
+                                "RegexString": "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]*$",
+                                "TextTransformations": [
+                                    {
+                                        "Priority": 0,
+                                        "Type": "NONE"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "VisibilityConfig": {
+        "CloudWatchMetricsEnabled": true,
+        "MetricName": "CheckIfHumanTraffic",
+        "SampledRequestsEnabled": true
+    }
+}
+```
+
+Note: 
+
+1. WAF rules can be reordered to meet business logic requirements.
+
+2. Depending on the use-case, these rules are entirely configurable and extendable - any bot categories can be set up for allow or blocking directly by WAF bot manager itself. 

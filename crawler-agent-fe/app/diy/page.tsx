@@ -1,20 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { userAgent } from "next/server"
 
 import PageLayout from "../components/PageLayout"
-import {
-  WithTokenBotTypes,
-  WithoutTokenBotTypes,
-} from "../components/SearchBar"
 import TopBar from "../components/TopBar"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 
 const AWS_URLS = [
   {
@@ -100,12 +89,7 @@ export default function DIYPage() {
   const selectedAwsName =
     AWS_URLS.find((a) => a.url === selectedAws)?.name || ""
 
-  let wafSelected = selectedAwsName.includes("WAF")
-
-  const step1Curl = `curl "${selectedAws}"`
-
-  const step1CurlWaf = (userAgent: string) => `curl "${selectedAws}" \\
-    --header "user-agent: ${userAgent}" `
+  const step1Curl = `curl -k "${selectedAws}"`
 
   const step3Curl = `curl --request POST \\
   --url https://api.skyfire.xyz/api/v1/tokens \\
@@ -117,12 +101,8 @@ export default function DIYPage() {
   "sellerServiceId": "51bcabe1-c699-474e-bc35-9840b248da52"
 }'`
 
-  const step4Curl = `curl "${selectedAws}" \\
+  const step4Curl = `curl -k "${selectedAws}" \\
   --header "skyfire-pay-id: KYA_TOKEN"`
-
-  const step4CurlWaf = (userAgent: string) => `curl "${selectedAws}" \\
-      --header "user-agent: ${userAgent}" \\
-      --header "skyfire-pay-id: KYA_TOKEN"`
 
   return (
     <>
@@ -187,8 +167,6 @@ export default function DIYPage() {
                 )}
               </div>
             </div>
-
-            {!wafSelected ? (
               <>
                 {/* Step 1 */}
                 <div className="mb-8">
@@ -198,9 +176,7 @@ export default function DIYPage() {
                   <p className="text-gray-600 mb-4">
                     This demonstrates that the protected website blocks requests
                     without proper authentication. You&apos;ll receive a 403
-                    error response - Missing KYA token `skyfire-pay-id`. Please
-                    create an account at https://app.skyfire.xyz and create a
-                    KYA token - https://docs.skyfire.xyz/reference/create-token.
+                    error response - Missing KYAPay token in the skyfire-pay-id header. Please create an account at https://app.skyfire.xyz and create a kya token - https://docs.skyfire.xyz/reference/create-token and include it in your request in the skyfire-pay-id header.
                   </p>
                   <div className="bg-gray-900 text-green-400 p-6 rounded-lg font-mono text-sm overflow-x-auto relative">
                     <CopyButton text={step1Curl} />
@@ -337,7 +313,7 @@ export default function DIYPage() {
                       </code>{" "}
                       header contains your KYA token and authenticates your
                       request to the protected service. This header is
-                      automatically validated by AWS {selectedAwsName} to verify your
+                      automatically validated by {selectedAwsName.includes("API Gateway") ? `Lambda Authorizer function` : `Lambda@Edge function`} to verify your
                       agent&apos;s identity and authorization.
                     </p>
                   </div>
@@ -384,278 +360,6 @@ export default function DIYPage() {
                   </div>
                 </div>
               </>
-            ) : (
-              <>
-                <div className="flex flex-col gap-8">
-                  {/* Without Token Section */}
-                  <div>
-                    <h3 className="text-2xl font-semibold mb-4 text-gray-900">
-                      Without token
-                    </h3>
-                    <Accordion type="single" collapsible className="w-full">
-                      {WithoutTokenBotTypes.map((bot, index) => (
-                        <AccordionItem key={bot.type} value={`without-token-${index}`}>
-                          <AccordionTrigger className="text-left">
-                            {bot.type}
-                          </AccordionTrigger>
-                          <AccordionContent>
-                            {/* Step 1 */}
-                            <div className="mb-8">
-                              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                                Step 1: Try accessing protected website without token
-                              </h3>
-                              <div className="bg-gray-900 text-green-400 p-6 rounded-lg font-mono text-sm overflow-x-auto relative">
-                                <CopyButton text={step1CurlWaf(bot.userAgent)} />
-                                <pre className="whitespace-pre-wrap break-all pr-20">
-                                  {step1CurlWaf(bot.userAgent)}
-                                </pre>
-                              </div>
-                              <div className="mt-4 bg-gray-100 border-2 border-gray-300 rounded-lg p-4">
-                                <p className="text-sm font-medium text-gray-900">
-                                  {bot.description}
-                                </p>
-                              </div>
-                            </div>
-                          </AccordionContent>
-                        </AccordionItem>
-                      ))}
-                    </Accordion>
-                  </div>
-
-                  {/* With Token Section */}
-                  <div>
-                    <h3 className="text-2xl font-semibold mb-4 text-gray-900">
-                      With Token
-                    </h3>
-                    <Accordion type="single" collapsible className="w-full">
-                      {WithTokenBotTypes.map((bot, index) => (
-                        <AccordionItem key={bot.type} value={`with-token-${index}`}>
-                          <AccordionTrigger className="text-left">
-                            {bot.type}
-                          </AccordionTrigger>
-                          <AccordionContent>
-                            {/* Step 1 */}
-                            <div className="mb-8">
-                              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                                Step 1: Try accessing protected website without token
-                              </h3>
-                              <p className="text-gray-600 mb-4">
-                                This demonstrates that the protected website blocks
-                                requests without proper authentication. You&apos;ll
-                                receive a 403 error response - Missing KYA token
-                                `skyfire-pay-id`. Please create an account at
-                                https://app.skyfire.xyz and create a KYA token -
-                                https://docs.skyfire.xyz/reference/create-token.
-                              </p>
-                              <div className="bg-gray-900 text-green-400 p-6 rounded-lg font-mono text-sm overflow-x-auto relative">
-                                <CopyButton text={step1CurlWaf(bot.userAgent)} />
-                                <pre className="whitespace-pre-wrap break-all pr-20">
-                                  {step1CurlWaf(bot.userAgent)}
-                                </pre>
-                              </div>
-                            </div>
-
-                            {/* Step 2 */}
-                            <div className="mb-8">
-                              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                                Step 2: Create Skyfire account and get Buyer Agent API
-                                key
-                              </h3>
-                              <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-md">
-                                <ol className="list-decimal list-inside space-y-3 text-gray-700">
-                                  <li>
-                                    Go to{" "}
-                                    <a
-                                      href="https://app.skyfire.xyz"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:text-blue-800 hover:underline font-semibold"
-                                    >
-                                      app.skyfire.xyz
-                                    </a>{" "}
-                                    and create an account (if you don&apos;t have one)
-                                  </li>
-                                  <li>
-                                    Navigate to the API Keys section in your dashboard
-                                  </li>
-                                  <li>
-                                    Create a new <strong>Buyer Agent API key</strong>
-                                  </li>
-                                  <li>
-                                    Copy the API key and save it securely -
-                                    you&apos;ll need it for the next step
-                                  </li>
-                                  <li>
-                                    For detailed instructions, refer to the{" "}
-                                    <a
-                                      href="https://docs.skyfire.xyz/docs/introduction"
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-600 hover:text-blue-800 hover:underline font-semibold"
-                                    >
-                                      Skyfire Platform Guide
-                                    </a>
-                                  </li>
-                                </ol>
-                              </div>
-                            </div>
-
-                            {/* Step 3 */}
-                            <div className="mb-8">
-                              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                                Step 3: Create KYA token via Skyfire API
-                              </h3>
-                              <p className="text-gray-600 mb-4">
-                                Call the Skyfire API directly to create a KYA (Know
-                                Your Agent) token. This token will be used to
-                                authenticate your requests and grant access to the
-                                protected website. Replace{" "}
-                                <code className="bg-gray-200 px-1 rounded">
-                                  YOUR_API_KEY
-                                </code>{" "}
-                                with your Buyer Agent API key from Step 2.
-                              </p>
-                              <div className="bg-gray-900 text-green-400 p-6 rounded-lg font-mono text-sm overflow-x-auto relative">
-                                <CopyButton text={step3Curl} />
-                                <pre className="whitespace-pre-wrap break-all pr-20">
-                                  {step3Curl}
-                                </pre>
-                              </div>
-                              <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                <p className="text-sm text-blue-800 mb-2">
-                                  <strong>Parameters explained:</strong>
-                                </p>
-                                <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-                                  <li>
-                                    <code className="bg-white px-1 rounded">
-                                      type
-                                    </code>
-                                    : Set to &quot;kya&quot; for Know Your Agent token
-                                  </li>
-                                  <li>
-                                    <code className="bg-white px-1 rounded">
-                                      buyerTag
-                                    </code>
-                                    : Optional identifier for your organization
-                                  </li>
-                                  <li>
-                                    <code className="bg-white px-1 rounded">
-                                      sellerServiceId
-                                    </code>
-                                    : Crawler service ID
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                                <p className="text-sm text-yellow-800">
-                                  <strong>Expected Response:</strong> You&apos;ll
-                                  receive a JSON response containing a token field.
-                                  Copy the entire JWT token value for use in Step 4.
-                                </p>
-                                <code className="block mt-2 text-sm text-gray-800 bg-white p-2 rounded border">
-                                  {`{ "token": "eyJhbGciOiJFUzI1NiIsImtpZCI6IjAiLCJ0eXAiOiJreWErSldUIn0..." }`}
-                                </code>
-                              </div>
-                            </div>
-
-                            {/* Step 4 */}
-                            <div className="mb-8">
-                              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                                Step 4: Access protected website with token
-                              </h3>
-                              {bot.type ===
-                              "Bot with Skyfire Identity - Not Allowed" ? (
-                                <>
-                                  <p className="text-gray-600 mb-4">
-                                    Now use the KYA token from Step 3 to access the
-                                    protected website. Replace{" "}
-                                    <code className="bg-gray-200 px-1 rounded">
-                                      KYA_TOKEN
-                                    </code>{" "}
-                                    with the actual KYA token you received. The
-                                    request will still fail to access the protected
-                                    site using the{" "}
-                                    <code className="bg-gray-200 px-1 rounded">
-                                      skyfire-pay-id
-                                    </code>{" "}
-                                    header since the Archiver category bots are configured to be blocked in AWS WAF.
-                                  </p>
-                                  <div className="bg-gray-900 text-green-400 p-6 rounded-lg font-mono text-sm overflow-x-auto relative">
-                                    <CopyButton text={step4CurlWaf(bot.userAgent)} />
-                                    <pre className="whitespace-pre-wrap break-all pr-20">
-                                      {step4CurlWaf(bot.userAgent)}
-                                    </pre>
-                                  </div>
-                                  <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                    <p className="text-sm text-blue-800">
-                                      <strong>Important:</strong> The{" "}
-                                      <code className="bg-white px-1 rounded">
-                                        skyfire-pay-id
-                                      </code>{" "}
-                                      header contains your KYA token and authenticates
-                                      your request to the protected service. This
-                                      header is automatically validated by AWS {selectedAwsName} to verify your agent&apos;s identity and
-                                      authorization.
-                                    </p>
-                                  </div>
-                                </>
-                              ) : (
-                                <>
-                                  <p className="text-gray-600 mb-4">
-                                    Now use the KYA token from Step 3 to access the
-                                    protected website. Replace{" "}
-                                    <code className="bg-gray-200 px-1 rounded">
-                                      KYA_TOKEN
-                                    </code>{" "}
-                                    with the actual KYA token you received. The
-                                    request will successfully access the protected
-                                    site using the{" "}
-                                    <code className="bg-gray-200 px-1 rounded">
-                                      skyfire-pay-id
-                                    </code>{" "}
-                                    header.
-                                  </p>
-                                  <div className="bg-gray-900 text-green-400 p-6 rounded-lg font-mono text-sm overflow-x-auto relative">
-                                    <CopyButton text={step4CurlWaf(bot.userAgent)} />
-                                    <pre className="whitespace-pre-wrap break-all pr-20">
-                                      {step4CurlWaf(bot.userAgent)}
-                                    </pre>
-                                  </div>
-                                  <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                    <p className="text-sm text-blue-800">
-                                      <strong>Important:</strong> The{" "}
-                                      <code className="bg-white px-1 rounded">
-                                        skyfire-pay-id
-                                      </code>{" "}
-                                      header contains your KYA token and authenticates
-                                      your request to the protected service. This
-                                      header is automatically validated by AWS {selectedAwsName} to verify your agent&apos;s identity and
-                                      authorization.
-                                    </p>
-                                  </div>
-                                  <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4">
-                                    <p className="text-sm text-green-800">
-                                      <strong>Success!</strong> With a valid KYA token
-                                      in the{" "}
-                                      <code className="bg-white px-1 rounded">
-                                        skyfire-pay-id
-                                      </code>{" "}
-                                      header, you can now access the protected website
-                                      and retrieve the data. You should receive the
-                                      HTML content of the page instead of a 403 error.
-                                    </p>
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          </AccordionContent>
-                        </AccordionItem>
-                      ))}
-                    </Accordion>
-                  </div>
-                </div>
-              </>
-            )}
           </div>
         </div>
       </PageLayout>

@@ -22,10 +22,14 @@
             }
         ]
     },
-    "Capacity": 905,
+    "Capacity": 913,
     "CustomResponseBodies": {
         "missing-KYA-token-error": {
             "Content": "{\"message\":\"Missing token `skyfire-pay-id`. Please create an account at https://app.skyfire.xyz and create a kya token - https://docs.skyfire.xyz/reference/create-token.\"}",
+            "ContentType": "APPLICATION_JSON"
+        },
+        "missing-skyfire-KYA-error": {
+            "Content": "{\"message\":\"ERROR: Missing KYAPay token in the skyfire-pay-id header. Please create an account at https://app.skyfire.xyz and create a kya token - https://docs.skyfire.xyz/reference/create-token and include it in your request in the skyfire-pay-id header.\"}",
             "ContentType": "APPLICATION_JSON"
         },
         "missing-token-error": {
@@ -430,7 +434,8 @@
                     "ManagedRuleGroupConfigs": [
                         {
                             "AWSManagedRulesBotControlRuleSet": {
-                                "InspectionLevel": "COMMON"
+                                "EnableMachineLearning": true,
+                                "InspectionLevel": "TARGETED"
                             }
                         }
                     ],
@@ -444,7 +449,7 @@
                         },
                         {
                             "ActionToUse": {
-                                "Block": {}
+                                "Count": {}
                             },
                             "Name": "CategoryArchiver"
                         },
@@ -480,7 +485,7 @@
                         },
                         {
                             "ActionToUse": {
-                                "Allow": {}
+                                "Count": {}
                             },
                             "Name": "CategoryMonitoring"
                         },
@@ -492,19 +497,19 @@
                         },
                         {
                             "ActionToUse": {
-                                "Allow": {}
+                                "Count": {}
                             },
                             "Name": "CategorySearchEngine"
                         },
                         {
                             "ActionToUse": {
-                                "Allow": {}
+                                "Count": {}
                             },
                             "Name": "CategorySecurity"
                         },
                         {
                             "ActionToUse": {
-                                "Allow": {}
+                                "Count": {}
                             },
                             "Name": "CategorySeo"
                         },
@@ -594,11 +599,11 @@
             "Action": {
                 "Count": {}
             },
-            "Name": "BotsRequireSkyfireToken",
+            "Name": "IsAutomatedUnverifiedRequest",
             "Priority": 15,
             "RuleLabels": [
                 {
-                    "Name": "SkyfireTokenRequired"
+                    "Name": "IsAutomatedUnverifiedRequest"
                 }
             ],
             "Statement": {
@@ -606,13 +611,31 @@
                     "Statements": [
                         {
                             "LabelMatchStatement": {
-                                "Key": "awswaf:managed:aws:bot-control:bot:category:ai",
+                                "Key": "awswaf:managed:aws:bot-control:bot:unverified",
                                 "Scope": "LABEL"
                             }
                         },
                         {
                             "LabelMatchStatement": {
-                                "Key": "awswaf:managed:aws:bot-control:bot:category:scraping_framework",
+                                "Key": "awswaf:managed:aws:bot-control:signal:non_browser_user_agent",
+                                "Scope": "LABEL"
+                            }
+                        },
+                        {
+                            "LabelMatchStatement": {
+                                "Key": "awswaf:managed:aws:bot-control:signal:automated_browser",
+                                "Scope": "LABEL"
+                            }
+                        },
+                        {
+                            "LabelMatchStatement": {
+                                "Key": "awswaf:managed:aws:bot-control:targeted:signal:automated_browser",
+                                "Scope": "LABEL"
+                            }
+                        },
+                        {
+                            "LabelMatchStatement": {
+                                "Key": "awswaf:managed:aws:bot-control:targeted:signal:browser_automation_extension",
                                 "Scope": "LABEL"
                             }
                         }
@@ -629,19 +652,19 @@
             "Action": {
                 "Block": {
                     "CustomResponse": {
-                        "CustomResponseBodyKey": "missing-KYA-token-error",
+                        "CustomResponseBodyKey": "missing-skyfire-KYA-error",
                         "ResponseCode": 401
                     }
                 }
             },
-            "Name": "SkyfireDecisioning",
+            "Name": "BlockIfAutomatedRequestWithNoSkyfireToken",
             "Priority": 16,
             "Statement": {
                 "AndStatement": {
                     "Statements": [
                         {
                             "LabelMatchStatement": {
-                                "Key": "SkyfireTokenRequired",
+                                "Key": "IsAutomatedUnverifiedRequest",
                                 "Scope": "LABEL"
                             }
                         },
@@ -671,6 +694,64 @@
             "VisibilityConfig": {
                 "CloudWatchMetricsEnabled": true,
                 "MetricName": "SkyfireDecisioning",
+                "SampledRequestsEnabled": true
+            }
+        },
+        {
+            "Action": {
+                "Challenge": {}
+            },
+            "Name": "CheckIfHumanTraffic",
+            "Priority": 17,
+            "Statement": {
+                "AndStatement": {
+                    "Statements": [
+                        {
+                            "NotStatement": {
+                                "Statement": {
+                                    "LabelMatchStatement": {
+                                        "Key": "awswaf:managed:aws:bot-control:bot:verified",
+                                        "Scope": "LABEL"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "NotStatement": {
+                                "Statement": {
+                                    "LabelMatchStatement": {
+                                        "Key": "IsAutomatedUnverifiedRequest",
+                                        "Scope": "LABEL"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "NotStatement": {
+                                "Statement": {
+                                    "RegexMatchStatement": {
+                                        "FieldToMatch": {
+                                            "SingleHeader": {
+                                                "Name": "skyfire-pay-id"
+                                            }
+                                        },
+                                        "RegexString": "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]*$",
+                                        "TextTransformations": [
+                                            {
+                                                "Priority": 0,
+                                                "Type": "NONE"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "VisibilityConfig": {
+                "CloudWatchMetricsEnabled": true,
+                "MetricName": "CheckIfHumanTraffic",
                 "SampledRequestsEnabled": true
             }
         }

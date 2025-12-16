@@ -66,8 +66,6 @@ The demo consists of four integrated projects that work together to demonstrate 
 - Purpose: Backend service that performs the actual crawling operations
 - Features:
   - Executes crawl requests with and without `kya` tokens
-  - Integrates with Bot Protect Proxy for access control
-  - Handles token validation and request processing
   - Provides API endpoints for the frontend
   - Manages crawl job queuing and execution
 - Technology: Node.js/Express with crawler logic
