@@ -26,7 +26,8 @@ interface SearchBarProps {
   setAlerts: React.Dispatch<React.SetStateAction<Alert[]>>
   skyfireKyaToken?: string
   onAwsUrlChange?: (url: string) => void
-  pageRoute: string 
+  pageRoute: string
+  initialUrl?: string
 }
 
 // Define the form schema with Zod
@@ -71,6 +72,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   skyfireKyaToken,
   onAwsUrlChange,
   pageRoute,
+  initialUrl,
 }) => {
   const [kyaToken, setKyaToken] = useState<string>(skyfireKyaToken || "")
   const [isLoading, setIsLoading] = useState(false)
@@ -81,9 +83,16 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const form = useForm<SearchFormValues>({
     resolver: zodResolver(searchFormSchema),
     defaultValues: {
-      url: "",
+      url: initialUrl || "",
     },
   })
+
+  // Set the initial URL when it changes (e.g., when token is created)
+  useEffect(() => {
+    if (initialUrl) {
+      form.setValue("url", initialUrl)
+    }
+  }, [initialUrl, form])
 
   // watch selected url to decide whether to show bot dropdown
   const selectedUrl = form.watch("url")

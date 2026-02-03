@@ -18,17 +18,19 @@ export default function CrawlWithTokenPage() {
     const [kyaToken, setKyaToken] = useState<string | null>("")
     const [decodedToken, setDecodedToken] = useState<any>(null)
     const [selectedUrl, setSelectedUrl] = useState<string>("")
+    const [tokenCreatedForUrl, setTokenCreatedForUrl] = useState<string>("")
 
     const handleStartOver = async () => {
       setKyaToken(null)
       setDecodedToken(null);
+      setTokenCreatedForUrl("");
     }
 
-    const handleCreateToken = async () => {
+    const handleCreateToken = async ( sellerDomainOrUrl: string ) => {
       try {
         const response: AxiosResponse<{token:string, error: string}> = await axios.post(
-          `${process.env.NEXT_PUBLIC_SERVICE_BASE_URL}/token`,
-          {userApiKey: userApiKey},
+            `${process.env.NEXT_PUBLIC_SERVICE_BASE_URL}/token`,
+            {tokenType: "kya",  userApiKey: userApiKey, sellerDomainOrUrl: sellerDomainOrUrl },
         );
         if (response.data.error) {
           setError(response.data.error);
@@ -37,6 +39,7 @@ export default function CrawlWithTokenPage() {
         }
         setError(null);
         setKyaToken(response.data.token);
+        setTokenCreatedForUrl(sellerDomainOrUrl);
         setDecodedToken(null);
       } catch (err: any) {
         const apiError = err.response?.data?.error || "Unknown error";
@@ -116,9 +119,32 @@ export default function CrawlWithTokenPage() {
                         
                         <div className="mb-6">
                             <div className="mt-6 flex w-full flex-col gap-4 rounded-xl border border-gray-200 bg-white p-6 shadow-md">
-                                <div className="flex items-center gap-3">
-                                    <span className="text-sm text-gray-500">Seller Service:</span>
-                                    <span className="text-base font-semibold text-gray-900">{SELLER_SERVICE.name}</span>
+         
+                                <div className="flex flex-col gap-2">
+                                    <span className="text-sm text-gray-500">Target Website URL:</span>
+                                    {kyaToken ? (
+                                        <div className="w-full h-12 text-base rounded-md border border-gray-300 bg-gray-100 px-3 py-2 flex items-center">
+                                            <span className="text-gray-900 break-all">{tokenCreatedForUrl}</span>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <select
+                                                value={selectedUrl}
+                                                onChange={(e) => setSelectedUrl(e.target.value)}
+                                                className="w-full h-12 text-base rounded-md border border-gray-300 bg-white px-3 py-2 focus:outline-none"
+                                            >
+                                                <option value="">Select a target website</option>
+                                                <option value="https://skyfire.xyz">Skyfire (Unprotected)</option>
+                                                <option value="https://mock-news-site-aws-api-gateway.skyfire.xyz/">MockNews (API Gateway) - Protected</option>
+                                                <option value="https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/">MockNews (API Gateway + WAF) - Protected</option>
+                                                <option value="https://mock-news-site-aws-cloudfront.skyfire.xyz/">MockNews (CloudFront) - Protected</option>
+                                                <option value="https://mock-news-site-aws-cloudfront-waf.skyfire.xyz/">MockNews (CloudFront + WAF) - Protected</option>
+                                            </select>
+                                            {selectedUrl && (
+                                                <span className="text-sm text-gray-600 break-all">{selectedUrl}</span>
+                                            )}
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -170,7 +196,7 @@ export default function CrawlWithTokenPage() {
                                 <div className="mt-8">
                                     <h2 className="mb-4 text-xl font-semibold text-gray-900">Step 3: Select website to crawl</h2>
                                         <div className="mt-6">
-                                        <CrawlSearchLog pageRoute={"/token"} skyfireKyaToken={kyaToken} onAwsUrlChange={setSelectedUrl} />
+                                        <CrawlSearchLog pageRoute={"/token"} skyfireKyaToken={kyaToken} onAwsUrlChange={setSelectedUrl} initialUrl={tokenCreatedForUrl} />
                                     </div>
                                 </div>
                             </>
@@ -178,10 +204,14 @@ export default function CrawlWithTokenPage() {
                             <div className="mt-4 flex flex-col gap-2">
                                 <button
                                     className="w-fit rounded bg-black px-6 py-2 font-semibold text-white transition hover:bg-gray-800 disabled:opacity-60"
-                                    onClick={handleCreateToken}
+                                    onClick={() => handleCreateToken(selectedUrl)}
+                                    disabled={!selectedUrl}
                                 >
                                     Create Token
                                 </button>
+                                {!selectedUrl && (
+                                    <span className="text-sm text-gray-500">Please select a target website URL above</span>
+                                )}
                             </div>
                         )}
                     </div>

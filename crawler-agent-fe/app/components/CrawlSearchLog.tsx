@@ -9,11 +9,12 @@ interface CrawlSearchLogProps {
   pageRoute: string;
   skyfireKyaToken?: string;
   onAwsUrlChange?: (url: string) => void;
+  initialUrl?: string;
 }
 
 const channelId = uuidv4();
 
-export default function CrawlSearchLog({ pageRoute, skyfireKyaToken, onAwsUrlChange }: CrawlSearchLogProps) {
+export default function CrawlSearchLog({ pageRoute, skyfireKyaToken, onAwsUrlChange, initialUrl }: CrawlSearchLogProps) {
   const [currentSite, setCurrentSite] = useState<MessageData>();
   const [summary, setSummary] = useState<MessageData>();
   const [depth, setDepth] = useState<string | undefined>(undefined);
@@ -80,6 +81,7 @@ export default function CrawlSearchLog({ pageRoute, skyfireKyaToken, onAwsUrlCha
             skyfireKyaToken={skyfireKyaToken}
             onAwsUrlChange={onAwsUrlChange}
             pageRoute={pageRoute}
+            initialUrl={initialUrl}
           />
         </div>
       </div>
