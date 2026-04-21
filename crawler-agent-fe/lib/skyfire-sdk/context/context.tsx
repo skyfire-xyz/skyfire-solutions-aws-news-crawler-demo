@@ -136,7 +136,6 @@ export const SkyfireProvider: React.FC<{ children: ReactNode }> = ({
   }, [state.localAPIKey])
 
   useEffect(() => {
-
     const tosAgreed = localStorage.getItem("tosAgreed")
     if (tosAgreed !== null) {
       dispatch(updateTOSAgreement(JSON.parse(tosAgreed)))
