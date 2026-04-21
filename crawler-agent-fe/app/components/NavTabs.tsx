@@ -1,18 +1,18 @@
 "use client"
 
-import { useRouter, usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 const tabs = [
-  { 
-    label: "Crawl without Token", 
+  {
+    label: "Crawl without Token",
     route: "/",
   },
-  { 
-    label: "Crawl with Token", 
+  {
+    label: "Crawl with Token",
     route: "/token",
   },
-  { 
-    label: "Do It Yourself", 
+  {
+    label: "Do It Yourself",
     route: "/diy",
   },
 ]

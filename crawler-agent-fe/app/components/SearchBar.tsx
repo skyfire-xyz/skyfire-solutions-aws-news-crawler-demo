@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios from "axios"
 import { useForm } from "react-hook-form"
@@ -26,7 +26,7 @@ interface SearchBarProps {
   setAlerts: React.Dispatch<React.SetStateAction<Alert[]>>
   skyfireKyaToken?: string
   onAwsUrlChange?: (url: string) => void
-  pageRoute: string 
+  pageRoute: string
 }
 
 // Define the form schema with Zod
@@ -48,13 +48,21 @@ interface Suggestion {
 
 const suggestions: Suggestion[] = [
   { url: "https://skyfire.xyz", name: "Skyfire", type: "Unprotected" },
-  { url: "https://mock-news-site-aws-api-gateway.skyfire.xyz/", name: "MockNews (API Gateway)", type: "Protected" },
+  {
+    url: "https://mock-news-site-aws-api-gateway.skyfire.xyz/",
+    name: "MockNews (API Gateway)",
+    type: "Protected",
+  },
   {
     url: "https://mock-news-site-aws-api-gateway-waf.skyfire.xyz/",
     name: "MockNews (API Gateway + WAF)",
     type: "Protected",
   },
-  { url: "https://mock-news-site-aws-cloudfront.skyfire.xyz/", name: "MockNews (CloudFront)", type: "Protected" }, 
+  {
+    url: "https://mock-news-site-aws-cloudfront.skyfire.xyz/",
+    name: "MockNews (CloudFront)",
+    type: "Protected",
+  },
   {
     url: "https://mock-news-site-aws-cloudfront-waf.skyfire.xyz/",
     name: "MockNews (CloudFront + WAF)",
@@ -89,12 +97,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const selectedUrl = form.watch("url")
 
   useEffect(() => {
-      // reset bot category when URL changes
-      if (typeof onAwsUrlChange === "function") {
-        onAwsUrlChange(selectedUrl)
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedUrl])
+    // reset bot category when URL changes
+    if (typeof onAwsUrlChange === "function") {
+      onAwsUrlChange(selectedUrl)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedUrl])
 
   const handleUrlKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!isUrlFocused || suggestions.length === 0) return
