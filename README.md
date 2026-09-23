@@ -45,7 +45,7 @@ Here is a [video link](https://youtu.be/zAlU-0Af1tw?si=IlxaRk892FQ7DU5l) for the
 
 To run this demo,
 
-- Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create your Skyfire API key and onboard your Buyer and Seller.
+- Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction-to-skyfire) to create your Skyfire API key and onboard your Buyer and Seller.
 
 ### Contents:
 
@@ -53,7 +53,7 @@ The demo consists of four integrated projects that work together to demonstrate 
 
 1. Crawler Agent Frontend:
 
-- Available at: [https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/crawler-agent-fe](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/crawler-agent-fe)
+- Available at: [https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/crawler-agent-fe](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/crawler-agent-fe)
 - Purpose: Interactive frontend that demonstrates the difference between authorized and unauthorized crawling
 - Features:
   - Skyfire token management interface
@@ -62,7 +62,7 @@ The demo consists of four integrated projects that work together to demonstrate 
 
 2. Crawler Agent Core:
 
-- Available at: [https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/crawler-agent-core](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/crawler-agent-core)
+- Available at: [https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/crawler-agent-core](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/crawler-agent-core)
 - Purpose: Backend service that performs the actual crawling operations
 - Features:
   - Executes crawl requests with and without `kya` tokens
@@ -72,7 +72,7 @@ The demo consists of four integrated projects that work together to demonstrate 
 
 3. AWS CloudFront/API Gateway with & without WAF for Protection:
 
-- Available at: [https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/aws](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/aws)
+- Available at: [https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/aws](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/aws)
 - Purpose: Acts as the bot manager and `kya` token processor
 - Features:
   - `kya` Token Verification - Validates the tokens in the `skyfire-pay-id` header of the requests
