@@ -219,7 +219,7 @@ export default function DIYPage() {
                     <li>
                       For detailed instructions, refer to the{" "}
                       <a
-                        href="https://docs.skyfire.xyz/docs/introduction"
+                        href="https://docs.skyfire.xyz/docs/introduction-to-skyfire"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-600 hover:text-blue-800 hover:underline font-semibold"

@@ -12,7 +12,7 @@ Here is a video for the running crawler demo:
 ### Pre-requisites
 
 1. Approved Seller Service with Seller Skyfire API Key:
-- Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction) to create a seller account and seller service.
+- Follow the [Skyfire Platform Setup Guide](https://docs.skyfire.xyz/docs/introduction-to-skyfire) to create a seller account and seller service.
 
 2. Pusher Credentials:
 - Create a Pusher Account and App:
