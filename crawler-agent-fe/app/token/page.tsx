@@ -103,7 +103,7 @@ export default function CrawlWithTokenPage() {
 
             <div className="mt-2">
               <a
-                href="https://docs.skyfire.xyz/docs/introduction"
+                href="https://docs.skyfire.xyz/docs/introduction-to-skyfire"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm font-semibold text-gray-800 hover:underline"
