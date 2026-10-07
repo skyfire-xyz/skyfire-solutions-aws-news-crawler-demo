@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  crawler-agent-core:
+    name: crawler-agent-core
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: crawler-agent-core
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 24
+          cache: yarn
+          cache-dependency-path: crawler-agent-core/yarn.lock
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+
+  crawler-agent-fe:
+    name: crawler-agent-fe
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: crawler-agent-fe
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 24
+          cache: yarn
+          cache-dependency-path: crawler-agent-fe/yarn.lock
+      - run: yarn install --frozen-lockfile
+      - run: yarn typecheck
+      - run: yarn build
+
+  ci:
+    name: ci
+    runs-on: ubuntu-latest
+    needs: [crawler-agent-core, crawler-agent-fe]
+    if: always()
+    steps:
+      - run: |
+          if [ "${{ needs.crawler-agent-core.result }}" != "success" ] || [ "${{ needs.crawler-agent-fe.result }}" != "success" ]; then
+            echo "one or more packages failed" >&2
+            exit 1
+          fi
