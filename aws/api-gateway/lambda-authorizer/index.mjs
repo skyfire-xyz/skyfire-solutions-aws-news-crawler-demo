@@ -14,7 +14,7 @@ export const handler = async (event) => {
   const headers = event.headers || {};
   const methodArn = event.methodArn; // IMPORTANT: REST API uses methodArn
 
-  const skyfireToken = headers["kyapay-token"] || headers["skyfire-pay-id"] || null;
+  const skyfireToken = headers["kyapay-token"] || null;
 
   if (skyfireToken) {
     try {

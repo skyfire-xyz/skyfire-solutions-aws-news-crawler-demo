@@ -25,15 +25,15 @@
     "Capacity": 913,
     "CustomResponseBodies": {
         "missing-KYA-token-error": {
-            "Content": "{\"message\":\"Missing token `skyfire-pay-id`. Please create an account at https://app.skyfire.xyz and create a kya token - https://docs.skyfire.xyz/reference/create-token.\"}",
+            "Content": "{\"message\":\"Missing token `kyapay-token`. Please create an account at https://app.skyfire.xyz and create a kya token - https://docs.skyfire.xyz/reference/create-token.\"}",
             "ContentType": "APPLICATION_JSON"
         },
         "missing-skyfire-KYA-error": {
-            "Content": "{\"message\":\"ERROR: Missing KYAPay token in the skyfire-pay-id header. Please create an account at https://app.skyfire.xyz and create a kya token - https://docs.skyfire.xyz/reference/create-token and include it in your request in the skyfire-pay-id header.\"}",
+            "Content": "{\"message\":\"ERROR: Missing KYAPay token in the kyapay-token header. Please create an account at https://app.skyfire.xyz and create a kya token - https://docs.skyfire.xyz/reference/create-token and include it in your request in the kyapay-token header.\"}",
             "ContentType": "APPLICATION_JSON"
         },
         "missing-token-error": {
-            "Content": "{\"error\":\"Missing token `skyfire-pay-id`. Please create an account at https://app.skyfire.xyz and create a kya, pay or kya+pay token - https://docs.skyfire.xyz/reference/create-token.\"}",
+            "Content": "{\"error\":\"Missing token `kyapay-token`. Please create an account at https://app.skyfire.xyz and create a kya, pay or kya+pay token - https://docs.skyfire.xyz/reference/create-token.\"}",
             "ContentType": "APPLICATION_JSON"
         }
     },
@@ -674,7 +674,7 @@
                                     "RegexMatchStatement": {
                                         "FieldToMatch": {
                                             "SingleHeader": {
-                                                "Name": "skyfire-pay-id"
+                                                "Name": "kyapay-token"
                                             }
                                         },
                                         "RegexString": "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]*$",
@@ -732,7 +732,7 @@
                                     "RegexMatchStatement": {
                                         "FieldToMatch": {
                                             "SingleHeader": {
-                                                "Name": "skyfire-pay-id"
+                                                "Name": "kyapay-token"
                                             }
                                         },
                                         "RegexString": "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]*$",

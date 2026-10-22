@@ -13,11 +13,7 @@ export const handler = async (event) => {
   const { request } = event.Records[0].cf;
 
   const kyapayHeader = request.headers["kyapay-token"];
-  const legacyHeader = request.headers["skyfire-pay-id"];
-  const skyfireToken =
-    (kyapayHeader && kyapayHeader[0].value) ||
-    (legacyHeader && legacyHeader[0].value) ||
-    null;
+  const skyfireToken = (kyapayHeader && kyapayHeader[0].value) || null;
 
   if (skyfireToken) {
     try {

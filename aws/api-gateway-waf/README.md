@@ -225,7 +225,7 @@ For blocking access to these unverified bots without valid Skyfire KYA Token - !
                             "RegexMatchStatement": {
                                 "FieldToMatch": {
                                     "SingleHeader": {
-                                        "Name": "skyfire-pay-id"
+                                        "Name": "kyapay-token"
                                     }
                                 },
                                 "RegexString": "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]*$",
@@ -255,7 +255,7 @@ A custom response can be set when WAF blocks requests to origin server
 
 3. Requests not recognised as bots (human traffic)
 
-In the last `CheckIfHumanTraffic` rule, we Challenge the request. If a particular request isn't a verified or unverified bot and also doesn't have a `skyfire-pay-id` header, a challenge is issued. When the request comes from a human using a browser, the JavaScript challenge is executed in the browser and successfully completed. In contrast, non-human clients (bots) typically do not execute JavaScript and therefore fail to pass the challenge.
+In the last `CheckIfHumanTraffic` rule, we Challenge the request. If a particular request isn't a verified or unverified bot and also doesn't have a `kyapay-token` header, a challenge is issued. When the request comes from a human using a browser, the JavaScript challenge is executed in the browser and successfully completed. In contrast, non-human clients (bots) typically do not execute JavaScript and therefore fail to pass the challenge.
 
 ![api-gateway-waf-skyfire-decisioning-1](../static/images/cloudfront-waf/cloudfront-waf-check-if-human.png)
 
@@ -297,7 +297,7 @@ In the last `CheckIfHumanTraffic` rule, we Challenge the request. If a particula
                             "RegexMatchStatement": {
                                 "FieldToMatch": {
                                     "SingleHeader": {
-                                        "Name": "skyfire-pay-id"
+                                        "Name": "kyapay-token"
                                     }
                                 },
                                 "RegexString": "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]*$",
