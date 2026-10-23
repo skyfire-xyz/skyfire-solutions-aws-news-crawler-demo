@@ -18,7 +18,14 @@ export default function CrawlWithTokenPage() {
   const [selectedUrl, setSelectedUrl] = useState<string>("")
   const [isCreatingToken, setIsCreatingToken] = useState(false)
 
-  const isUrlValid = /^https?:\/\//.test(selectedUrl)
+  const isUrlValid = (() => {
+    if (!/^https?:\/\//.test(selectedUrl)) return false
+    try {
+      return new URL(selectedUrl).hostname.length > 0
+    } catch {
+      return false
+    }
+  })()
 
   const handleStartOver = async () => {
     setKyaToken(null)
