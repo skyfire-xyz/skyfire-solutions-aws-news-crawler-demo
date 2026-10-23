@@ -9,6 +9,10 @@ const verifier = JwtVerifier.create({
     jwksUri: "https://app.skyfire.xyz/.well-known/jwks.json",
   });
 
+// Lambda@Edge does not support environment variables.
+// Set this to the seller domain this function is deployed to protect.
+const SELLER_DOMAIN = "<YOUR_SELLER_DOMAIN>";
+
 const requireClaim = (condition, msg) => {
   if (!condition) throw new Error(msg);
 };
@@ -35,10 +39,11 @@ export const handler = async (event) => {
       requireClaim(payload.apd != null, "Missing required claim: apd");
       requireClaim(payload.aid != null, "Missing required claim: aid");
       requireClaim(
-        typeof process.env.SELLER_DOMAIN === "string" &&
-          process.env.SELLER_DOMAIN.length > 0 &&
+        typeof SELLER_DOMAIN === "string" &&
+          SELLER_DOMAIN.length > 0 &&
+          SELLER_DOMAIN !== "<YOUR_SELLER_DOMAIN>" &&
           typeof payload.sdm === "string" &&
-          payload.sdm === process.env.SELLER_DOMAIN,
+          payload.sdm === SELLER_DOMAIN,
         "Invalid sdm claim",
       );
 

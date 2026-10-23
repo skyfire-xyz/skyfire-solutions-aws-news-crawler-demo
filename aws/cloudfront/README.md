@@ -37,6 +37,12 @@ CloudFront's control plane is hosted exclusively in this region, and all edge fu
 
 3. [Sample Lambda@Edge Function](cloudfront/lambda%40edge) for Skyfire Token Verification
 
+Lambda@Edge does not support environment variables. Before deploying, edit `index.mjs` and set the `SELLER_DOMAIN` constant at the top of the file to the seller domain this function protects (must match the `sdm` claim in incoming tokens). If left as the placeholder, all tokens will be rejected with `"Invalid sdm claim"`.
+
+```js
+const SELLER_DOMAIN = "your-seller-domain.example.com";
+```
+
 4. Add a trigger and deploy to Lambda@edge
 
 ![viewer request lambda](../static/images/cloudfront/viewer-request-lambda.png)

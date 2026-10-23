@@ -18,6 +18,12 @@ A CloudFront distribution can attach one Lambda function per event type.
 
 [Sample Lambda@Edge Function](../cloudfront-waf/lambda@edge/index.mjs) for Skyfire Token Verification
 
+Lambda@Edge does not support environment variables. Before deploying, edit `index.mjs` and set the `SELLER_DOMAIN` constant at the top of the file to the seller domain this function protects (must match the `sdm` claim in incoming tokens). If left as the placeholder, all tokens will be rejected with `"Invalid sdm claim"`.
+
+```js
+const SELLER_DOMAIN = "your-seller-domain.example.com";
+```
+
 Note: This sample uses a Viewer Request event, so the token validation happens before cache evaluation.
 
 If your environment requires advanced security (bot mitigation, IP filtering, rate limiting, geo-restrictions), you can layer AWS WAF on top of your CloudFront + Lambda@Edge architecture.
