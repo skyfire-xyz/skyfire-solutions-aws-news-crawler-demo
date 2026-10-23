@@ -98,11 +98,11 @@ export default function DIYPage() {
   --data '{
   "type": "kya",
   "buyerTag": "",
-  "sellerServiceId": "51bcabe1-c699-474e-bc35-9840b248da52"
+  "sellerDomainOrUrl": "${new URL(selectedAws).hostname}"
 }'`
 
   const step4Curl = `curl -k "${selectedAws}" \\
-  --header "skyfire-pay-id: KYA_TOKEN"`
+  --header "kyapay-token: KYA_TOKEN"`
 
   return (
     <>
@@ -176,10 +176,10 @@ export default function DIYPage() {
                 <p className="text-gray-600 mb-4">
                   This demonstrates that the protected website blocks requests
                   without proper authentication. You&apos;ll receive a 403 error
-                  response - Missing KYAPay token in the skyfire-pay-id header.
+                  response - Missing KYAPay token in the kyapay-token header.
                   Please create an account at https://app.skyfire.xyz and create
                   a kya token - https://docs.skyfire.xyz/reference/create-token
-                  and include it in your request in the skyfire-pay-id header.
+                  and include it in your request in the kyapay-token header.
                 </p>
                 <div className="bg-gray-900 text-green-400 p-6 rounded-lg font-mono text-sm overflow-x-auto relative">
                   <CopyButton text={step1Curl} />
@@ -264,9 +264,9 @@ export default function DIYPage() {
                     </li>
                     <li>
                       <code className="bg-white px-1 rounded">
-                        sellerServiceId
+                        sellerDomainOrUrl
                       </code>
-                      : Crawler service ID
+                      : Seller domain
                     </li>
                   </ul>
                 </div>
@@ -294,7 +294,7 @@ export default function DIYPage() {
                   with the actual KYA token you received. The request will
                   successfully access the protected site using the{" "}
                   <code className="bg-gray-200 px-1 rounded">
-                    skyfire-pay-id
+                    kyapay-token
                   </code>{" "}
                   header.
                 </p>
@@ -308,7 +308,7 @@ export default function DIYPage() {
                   <p className="text-sm text-blue-800">
                     <strong>Important:</strong> The{" "}
                     <code className="bg-white px-1 rounded">
-                      skyfire-pay-id
+                      kyapay-token
                     </code>{" "}
                     header contains your KYA token and authenticates your
                     request to the protected service. This header is
@@ -323,7 +323,7 @@ export default function DIYPage() {
                   <p className="text-sm text-green-800">
                     <strong>Success!</strong> With a valid KYA token in the{" "}
                     <code className="bg-white px-1 rounded">
-                      skyfire-pay-id
+                      kyapay-token
                     </code>{" "}
                     header, you can now access the protected website and
                     retrieve the data. You should receive the HTML content of

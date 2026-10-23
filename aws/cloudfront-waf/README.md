@@ -18,6 +18,12 @@ A CloudFront distribution can attach one Lambda function per event type.
 
 [Sample Lambda@Edge Function](../cloudfront-waf/lambda@edge/index.mjs) for Skyfire Token Verification
 
+Lambda@Edge does not support environment variables. Before deploying, edit `index.mjs` and set the `SELLER_DOMAIN` constant at the top of the file to the seller domain this function protects (must match the `sdm` claim in incoming tokens). If left as the placeholder, all tokens will be rejected with `"Invalid sdm claim"`.
+
+```js
+const SELLER_DOMAIN = "your-seller-domain.example.com";
+```
+
 Note: This sample uses a Viewer Request event, so the token validation happens before cache evaluation.
 
 If your environment requires advanced security (bot mitigation, IP filtering, rate limiting, geo-restrictions), you can layer AWS WAF on top of your CloudFront + Lambda@Edge architecture.
@@ -201,7 +207,7 @@ For blocking access to these unverified bots without valid Skyfire KYA Token - !
                             "RegexMatchStatement": {
                                 "FieldToMatch": {
                                     "SingleHeader": {
-                                        "Name": "skyfire-pay-id"
+                                        "Name": "kyapay-token"
                                     }
                                 },
                                 "RegexString": "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]*$",
@@ -231,7 +237,7 @@ A custom response can be set when WAF blocks requests to origin server
 
 3. Requests not recognised as bots (human traffic)
 
-In the last `CheckIfHumanTraffic` rule, we Challenge the request. If a particular request isn't a verified or unverified bot and also doesn't have a `skyfire-pay-id` header, a challenge is issued. When the request comes from a human using a browser, the JavaScript challenge is executed in the browser and successfully completed. In contrast, non-human clients (bots) typically do not execute JavaScript and therefore fail to pass the challenge.
+In the last `CheckIfHumanTraffic` rule, we Challenge the request. If a particular request isn't a verified or unverified bot and also doesn't have a `kyapay-token` header, a challenge is issued. When the request comes from a human using a browser, the JavaScript challenge is executed in the browser and successfully completed. In contrast, non-human clients (bots) typically do not execute JavaScript and therefore fail to pass the challenge.
 
 ![cloudfront-waf-skyfire-decisioning-1](../static/images/cloudfront-waf/cloudfront-waf-check-if-human.png)
 
@@ -273,7 +279,7 @@ JSON view
                             "RegexMatchStatement": {
                                 "FieldToMatch": {
                                     "SingleHeader": {
-                                        "Name": "skyfire-pay-id"
+                                        "Name": "kyapay-token"
                                     }
                                 },
                                 "RegexString": "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]*$",

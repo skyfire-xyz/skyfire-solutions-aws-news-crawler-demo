@@ -75,7 +75,7 @@ The demo consists of four integrated projects that work together to demonstrate 
 - Available at: [https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/aws](https://github.com/skyfire-xyz/skyfire-solutions-aws-news-crawler-demo/tree/main/aws)
 - Purpose: Acts as the bot manager and `kya` token processor
 - Features:
-  - `kya` Token Verification - Validates the tokens in the `skyfire-pay-id` header of the requests
+  - `kya` Token Verification - Validates the tokens in the `kyapay-token` header of the requests
   - Access Logging - Logs all authenticated bot requests for audit and monitoring
   - Request Proxying - Forwards valid requests to the target website
 

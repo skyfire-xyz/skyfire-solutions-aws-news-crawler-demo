@@ -47,8 +47,16 @@ Create resources and methods based on your endpoint requirements
 
 Sample Lambda Authorizer code for API Gateway can be found [here](../api-gateway/lambda-authorizer/)
 
+Configure the following Lambda environment variable in the AWS Lambda console (Configuration → Environment variables):
+
+| Key             | Value                             |
+| --------------- | --------------------------------- |
+| `SELLER_DOMAIN` | The seller domain this Lambda protects (must match the `sdm` claim in incoming tokens) |
+
+If `SELLER_DOMAIN` is not set, all tokens will be rejected with `"Invalid sdm claim"`.
+
 3. Associate the Lambda Authorizer with the created API Gateway
 
-![associate lambda](../static/images/api-gateway/associate-lambda.png)
+![associate lambda](../static/images/api-gateway/associate-lambda3.png)
 
-![associated lambda linked in api gateway](../static/images/api-gateway/associate-lambda-2.png)
+![associated lambda linked in api gateway](../static/images/api-gateway/associate-lambda4.png)

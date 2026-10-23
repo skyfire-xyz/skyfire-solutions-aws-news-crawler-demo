@@ -93,6 +93,14 @@ Create resources and methods based on your endpoint requirements
 
 Sample Lambda Authorizer code for API Gateway cann be found [here](../api-gateway-waf/lambda-authorizer/)
 
+Configure the following Lambda environment variable in the AWS Lambda console (Configuration → Environment variables):
+
+| Key             | Value                             |
+| --------------- | --------------------------------- |
+| `SELLER_DOMAIN` | The seller domain this Lambda protects (must match the `sdm` claim in incoming tokens) |
+
+If `SELLER_DOMAIN` is not set, all tokens will be rejected with `"Invalid sdm claim"`.
+
 3. Associate the Lambda Authorizer with the created API Gateway
 
 ![associate lambda](../static/images/api-gateway-waf/associate-lambda.png)
@@ -225,7 +233,7 @@ For blocking access to these unverified bots without valid Skyfire KYA Token - !
                             "RegexMatchStatement": {
                                 "FieldToMatch": {
                                     "SingleHeader": {
-                                        "Name": "skyfire-pay-id"
+                                        "Name": "kyapay-token"
                                     }
                                 },
                                 "RegexString": "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]*$",
@@ -255,7 +263,7 @@ A custom response can be set when WAF blocks requests to origin server
 
 3. Requests not recognised as bots (human traffic)
 
-In the last `CheckIfHumanTraffic` rule, we Challenge the request. If a particular request isn't a verified or unverified bot and also doesn't have a `skyfire-pay-id` header, a challenge is issued. When the request comes from a human using a browser, the JavaScript challenge is executed in the browser and successfully completed. In contrast, non-human clients (bots) typically do not execute JavaScript and therefore fail to pass the challenge.
+In the last `CheckIfHumanTraffic` rule, we Challenge the request. If a particular request isn't a verified or unverified bot and also doesn't have a `kyapay-token` header, a challenge is issued. When the request comes from a human using a browser, the JavaScript challenge is executed in the browser and successfully completed. In contrast, non-human clients (bots) typically do not execute JavaScript and therefore fail to pass the challenge.
 
 ![api-gateway-waf-skyfire-decisioning-1](../static/images/cloudfront-waf/cloudfront-waf-check-if-human.png)
 
@@ -297,7 +305,7 @@ In the last `CheckIfHumanTraffic` rule, we Challenge the request. If a particula
                             "RegexMatchStatement": {
                                 "FieldToMatch": {
                                     "SingleHeader": {
-                                        "Name": "skyfire-pay-id"
+                                        "Name": "kyapay-token"
                                     }
                                 },
                                 "RegexString": "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]*$",
