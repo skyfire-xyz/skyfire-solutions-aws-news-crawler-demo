@@ -9,7 +9,8 @@ import SearchBar from "./SearchBar"
 interface CrawlSearchLogProps {
   pageRoute: string
   skyfireKyaToken?: string
-  onAwsUrlChange?: (url: string) => void
+  preselectedUrl?: string
+  onUrlChange?: (url: string) => void
 }
 
 const channelId = uuidv4()
@@ -17,7 +18,8 @@ const channelId = uuidv4()
 export default function CrawlSearchLog({
   pageRoute,
   skyfireKyaToken,
-  onAwsUrlChange,
+  preselectedUrl,
+  onUrlChange,
 }: CrawlSearchLogProps) {
   const [currentSite, setCurrentSite] = useState<MessageData>()
   const [summary, setSummary] = useState<MessageData>()
@@ -85,7 +87,8 @@ export default function CrawlSearchLog({
             inputPayment={payment}
             setAlerts={setAlerts}
             skyfireKyaToken={skyfireKyaToken}
-            onAwsUrlChange={onAwsUrlChange}
+            preselectedUrl={preselectedUrl}
+            onUrlChange={onUrlChange}
             pageRoute={pageRoute}
           />
         </div>

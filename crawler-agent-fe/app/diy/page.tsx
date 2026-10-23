@@ -98,7 +98,7 @@ export default function DIYPage() {
   --data '{
   "type": "kya",
   "buyerTag": "",
-  "sellerServiceId": "51bcabe1-c699-474e-bc35-9840b248da52"
+  "sellerDomainOrUrl": "${new URL(selectedAws).hostname}"
 }'`
 
   const step4Curl = `curl -k "${selectedAws}" \\
@@ -264,9 +264,9 @@ export default function DIYPage() {
                     </li>
                     <li>
                       <code className="bg-white px-1 rounded">
-                        sellerServiceId
+                        sellerDomainOrUrl
                       </code>
-                      : Crawler service ID
+                      : Seller domain
                     </li>
                   </ul>
                 </div>

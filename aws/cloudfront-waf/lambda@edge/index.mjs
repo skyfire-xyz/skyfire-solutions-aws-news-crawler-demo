@@ -4,10 +4,14 @@ import { JwtVerifier } from "aws-jwt-verify";
 // so the cache can be reused for subsequent invocations. Then, only during the
 // first invocation, will the verifier actually need to fetch the JWKS.
 const verifier = JwtVerifier.create({
-    issuer: "https://app.skyfire.xyz", 
+    issuer: "https://app.skyfire.xyz",
     audience: "<YOUR_SELLER_AGENT_ID>",
     jwksUri: "https://app.skyfire.xyz/.well-known/jwks.json",
   });
+
+const requireClaim = (condition, msg) => {
+  if (!condition) throw new Error(msg);
+};
 
 export const handler = async (event) => {
   const { request } = event.Records[0].cf;
@@ -20,34 +24,23 @@ export const handler = async (event) => {
       // Signature + issuer + exp are validated by aws-jwt-verify.
       const payload = await verifier.verify(skyfireToken);
 
-      // typ (JWT header) must be kya+jwt or kya-pay+jwt.
       const [headerB64] = skyfireToken.split(".");
       const protectedHeader = JSON.parse(Buffer.from(headerB64, "base64url").toString("utf8"));
-      if (!["kya+jwt", "kya-pay+jwt"].includes(protectedHeader.typ)) {
-        throw new Error(`Invalid typ: ${protectedHeader.typ}`);
-      }
-
-      // env must be production.
-      if (payload.env !== "production") {
-        throw new Error(`Token is not from production environment: ${payload.env}`);
-      }
-
-      // iat must be present and not in the future.
       const nowSec = Math.floor(Date.now() / 1000);
-      if (typeof payload.iat !== "number" || payload.iat > nowSec) {
-        throw new Error(`Invalid iat: ${payload.iat}`);
-      }
 
-      // hid, apd, aid claims required for kya and kya-pay tokens.
-      if (payload.hid === undefined || payload.hid === null) {
-        throw new Error("Missing required claim: hid");
-      }
-      if (payload.apd === undefined || payload.apd === null) {
-        throw new Error("Missing required claim: apd");
-      }
-      if (payload.aid === undefined || payload.aid === null) {
-        throw new Error("Missing required claim: aid");
-      }
+      requireClaim(["kya+jwt", "kya-pay+jwt"].includes(protectedHeader.typ), `Invalid typ: ${protectedHeader.typ}`);
+      requireClaim(payload.env === "production", `Token is not from production environment: ${payload.env}`);
+      requireClaim(typeof payload.iat === "number" && payload.iat <= nowSec, `Invalid iat: ${payload.iat}`);
+      requireClaim(payload.hid != null, "Missing required claim: hid");
+      requireClaim(payload.apd != null, "Missing required claim: apd");
+      requireClaim(payload.aid != null, "Missing required claim: aid");
+      requireClaim(
+        typeof process.env.SELLER_DOMAIN === "string" &&
+          process.env.SELLER_DOMAIN.length > 0 &&
+          typeof payload.sdm === "string" &&
+          payload.sdm === process.env.SELLER_DOMAIN,
+        "Invalid sdm claim",
+      );
 
       console.log("Token is valid!");
     } catch (err) {

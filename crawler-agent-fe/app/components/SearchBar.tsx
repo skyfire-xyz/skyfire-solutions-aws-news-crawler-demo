@@ -25,7 +25,8 @@ interface SearchBarProps {
   inputPayment?: string
   setAlerts: React.Dispatch<React.SetStateAction<Alert[]>>
   skyfireKyaToken?: string
-  onAwsUrlChange?: (url: string) => void
+  preselectedUrl?: string
+  onUrlChange?: (url: string) => void
   pageRoute: string
 }
 
@@ -40,13 +41,13 @@ const searchFormSchema = z.object({
 
 type SearchFormValues = z.infer<typeof searchFormSchema>
 
-interface Suggestion {
+export interface Suggestion {
   url: string
   name: string
   type: string
 }
 
-const suggestions: Suggestion[] = [
+export const suggestions: Suggestion[] = [
   { url: "https://skyfire.xyz", name: "Skyfire", type: "Unprotected" },
   {
     url: "https://mock-news-site-aws-api-gateway.skyfire.xyz/",
@@ -77,7 +78,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   inputPayment,
   setAlerts,
   skyfireKyaToken,
-  onAwsUrlChange,
+  preselectedUrl,
+  onUrlChange,
   pageRoute,
 }) => {
   const [kyaToken, setKyaToken] = useState<string>(skyfireKyaToken || "")
@@ -89,20 +91,25 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const form = useForm<SearchFormValues>({
     resolver: zodResolver(searchFormSchema),
     defaultValues: {
-      url: "",
+      url: preselectedUrl || "",
     },
   })
 
-  // watch selected url to decide whether to show bot dropdown
-  const selectedUrl = form.watch("url")
+  const watchedUrl = form.watch("url")
 
   useEffect(() => {
-    // reset bot category when URL changes
-    if (typeof onAwsUrlChange === "function") {
-      onAwsUrlChange(selectedUrl)
+    if (preselectedUrl) {
+      form.setValue("url", preselectedUrl)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedUrl])
+  }, [preselectedUrl])
+
+  useEffect(() => {
+    if (typeof onUrlChange === "function") {
+      onUrlChange(watchedUrl)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchedUrl])
 
   const handleUrlKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!isUrlFocused || suggestions.length === 0) return
@@ -197,73 +204,79 @@ const SearchBar: React.FC<SearchBarProps> = ({
       <form className="flex w-full flex-col space-y-4">
         <div className="flex items-center space-x-2">
           <div className="relative flex-1">
-            <FormField
-              control={form.control}
-              name="url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="relative">
-                      <Input
-                        {...field}
-                        onFocus={() => setIsUrlFocused(true)}
-                        onBlur={() =>
-                          setTimeout(() => setIsUrlFocused(false), 200)
-                        }
-                        onKeyDown={handleUrlKeyDown}
-                        placeholder="Select or Enter website URL"
-                        autoComplete="off"
-                        disabled={isLoading}
-                      />
-                      {isUrlFocused && (
-                        <div className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-md border bg-white shadow-lg">
-                          {suggestions.map((suggestion, index) => (
-                            <div
-                              key={suggestion.url}
-                              className={`cursor-pointer border-b px-4 py-3 last:border-b-0 ${
-                                index === selectedUrlIndex
-                                  ? "border-blue-200 bg-gray-50"
-                                  : "hover:bg-gray-50"
-                              }`}
-                              onClick={() => {
-                                field.onChange(suggestion.url)
-                                setIsUrlFocused(false)
-                                setSelectedUrlIndex(-1)
-                              }}
-                            >
-                              <div className="flex items-center justify-between">
-                                <div className="flex min-w-0 flex-1 items-center gap-3">
-                                  <span
-                                    className={`rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-800 ${
-                                      suggestion.type === "Protected"
-                                        ? "mr-4"
-                                        : ""
-                                    }`}
-                                  >
-                                    {suggestion.type}
-                                  </span>
-                                  <div className="min-w-0 flex-1">
-                                    <div className="truncate text-sm font-medium text-gray-900">
-                                      {suggestion.name}
-                                    </div>
-                                    <div className="mt-1 truncate text-xs text-gray-500">
-                                      {suggestion.url}
+            {preselectedUrl ? (
+              <div className="truncate rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-900">
+                {preselectedUrl}
+              </div>
+            ) : (
+              <FormField
+                control={form.control}
+                name="url"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          {...field}
+                          onFocus={() => setIsUrlFocused(true)}
+                          onBlur={() =>
+                            setTimeout(() => setIsUrlFocused(false), 200)
+                          }
+                          onKeyDown={handleUrlKeyDown}
+                          placeholder="Select or Enter website URL"
+                          autoComplete="off"
+                          disabled={isLoading}
+                        />
+                        {isUrlFocused && (
+                          <div className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-md border bg-white shadow-lg">
+                            {suggestions.map((suggestion, index) => (
+                              <div
+                                key={suggestion.url}
+                                className={`cursor-pointer border-b px-4 py-3 last:border-b-0 ${
+                                  index === selectedUrlIndex
+                                    ? "border-blue-200 bg-gray-50"
+                                    : "hover:bg-gray-50"
+                                }`}
+                                onClick={() => {
+                                  field.onChange(suggestion.url)
+                                  setIsUrlFocused(false)
+                                  setSelectedUrlIndex(-1)
+                                }}
+                              >
+                                <div className="flex items-center justify-between">
+                                  <div className="flex min-w-0 flex-1 items-center gap-3">
+                                    <span
+                                      className={`rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-800 ${
+                                        suggestion.type === "Protected"
+                                          ? "mr-4"
+                                          : ""
+                                      }`}
+                                    >
+                                      {suggestion.type}
+                                    </span>
+                                    <div className="min-w-0 flex-1">
+                                      <div className="truncate text-sm font-medium text-gray-900">
+                                        {suggestion.name}
+                                      </div>
+                                      <div className="mt-1 truncate text-xs text-gray-500">
+                                        {suggestion.url}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </FormControl>
+                    <div className="absolute top-8 text-sm">
+                      <FormMessage />
                     </div>
-                  </FormControl>
-                  <div className="absolute top-8 text-sm">
-                    <FormMessage />
-                  </div>
-                </FormItem>
-              )}
-            />
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
 
           <Button

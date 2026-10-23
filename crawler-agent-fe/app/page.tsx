@@ -66,7 +66,7 @@ export default function App() {
         <CrawlSearchLog
           pageRoute={"/"}
           skyfireKyaToken={skyfireKyaToken}
-          onAwsUrlChange={setSelectedUrl}
+          onUrlChange={setSelectedUrl}
         />
       </PageLayout>
     </>
