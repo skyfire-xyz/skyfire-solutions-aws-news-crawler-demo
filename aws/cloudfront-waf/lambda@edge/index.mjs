@@ -5,6 +5,7 @@ import { JwtVerifier } from "aws-jwt-verify";
 // first invocation, will the verifier actually need to fetch the JWKS.
 const verifier = JwtVerifier.create({
     issuer: "https://app.skyfire.xyz",
+    audience: null,
     jwksUri: "https://app.skyfire.xyz/.well-known/jwks.json",
   });
 

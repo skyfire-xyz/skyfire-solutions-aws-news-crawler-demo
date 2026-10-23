@@ -57,6 +57,6 @@ If `SELLER_DOMAIN` is not set, all tokens will be rejected with `"Invalid sdm cl
 
 3. Associate the Lambda Authorizer with the created API Gateway
 
-![associate lambda](../static/images/api-gateway/associate-lambda.png)
+![associate lambda](../static/images/api-gateway/associate-lambda3.png)
 
-![associated lambda linked in api gateway](../static/images/api-gateway/associate-lambda-2.png)
+![associated lambda linked in api gateway](../static/images/api-gateway/associate-lambda-4.png)
