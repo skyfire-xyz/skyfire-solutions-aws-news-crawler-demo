@@ -59,4 +59,4 @@ If `SELLER_DOMAIN` is not set, all tokens will be rejected with `"Invalid sdm cl
 
 ![associate lambda](../static/images/api-gateway/associate-lambda3.png)
 
-![associated lambda linked in api gateway](../static/images/api-gateway/associate-lambda-4.png)
+![associated lambda linked in api gateway](../static/images/api-gateway/associate-lambda4.png)
