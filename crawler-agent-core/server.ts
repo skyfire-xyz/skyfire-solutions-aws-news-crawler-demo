@@ -20,6 +20,10 @@ app.get("/", (req: Request, res: Response) => {
   return res.send("Welcome to Crawler Service");
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Connected on ${port}`);
+});
+
+process.on("SIGTERM", () => {
+  server.close(() => process.exit(0));
 });
